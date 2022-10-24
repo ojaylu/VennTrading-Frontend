@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+
+#__next {
+    height: 100%
+}
+
+.title {
+    font-family: sans-serif;
+}
+
+.login {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 100vh;
+    background-image: linear-gradient(to right, #b6fbff, #83a4d4);
+}
+
+.login .name {
+    font-size: 3rem;
+    font-weight: 700;
+    border: 5px solid;
+    padding: 5px;
+    color: #FFFEF7;
+}
+
+.login > .right {
+    background-color: #FFFEF7;
+    width: 400px;
+    border-radius: 25px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 30px;
+    color: #3a3b3ce6;
+    box-shadow: 0 0 40px -5px #00000053;
+}
+
+.login > .right * {
+    color: inherit;
+}
+
+.form > * {
+    margin-top: 0px !important;
+    margin-bottom: 5px !important;
+}
+
+.form :not(.submit) {
+    color: inherit !important;
+}

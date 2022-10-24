@@ -1,0 +1,35 @@
+{
+  "name": "fyp-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^2.9.10",
+    "antd": "^4.23.5",
+    "dotenv": "^16.0.3",
+    "firebase": "^9.12.1",
+    "lodash": "^4.17.21",
+    "next": "12.3.1",
+    "react": "18.2.0",
+    "react-css-theme-switcher": "^0.3.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.38.0",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.12",
+    "eslint": "8.25.0",
+    "eslint-config-next": "12.3.1",
+    "gulp": "^4.0.2",
+    "gulp-csso": "^4.0.1",
+    "gulp-debug": "^4.0.0",
+    "gulp-less": "^5.0.0",
+    "gulp-postcss": "^9.0.1",
+    "less-plugin-npm-import": "^2.1.0"
+  }
+}
