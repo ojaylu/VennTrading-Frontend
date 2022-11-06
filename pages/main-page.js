@@ -13,12 +13,15 @@ import {
   Breadcrumb
 } from "antd";
 import { useState } from "react";
-import ThemeSwitcher from "../components/ThemeSwitcher.js";
-const { Header, Sider, Content } = Layout;
+import { useAuth } from "components/AuthProvider.js";
+import UserOptions from "components/UserOptions.js";
+import LayoutHeader from "components/LayoutHeader";
+const { Sider, Content } = Layout;
 const { Item } = Breadcrumb;
 
 function Main() {
     const [collapsed, setCollapsed] = useState(false);
+    const { logout } = useAuth();
     return (
         <Layout>
           <Sider 
@@ -53,17 +56,24 @@ function Main() {
                   icon: <UploadOutlined />,
                   label: 'nav 3',
                 },
+                {
+                  key: "4",
+                  label: <Button
+                    onClick={logout}
+                    block
+                    type="text"
+                    style={{
+                      color: "inherit"
+                    }}
+                  >
+                    Logout
+                  </Button>
+                }
               ]}
             />
           </Sider>
-        <Layout className="site-layout">
-          <Header
-            className="site-layout-background"
-            style={{
-              padding: 0,
-              height: "auto"
-            }}
-          >
+        <Layout>
+          <LayoutHeader>
             <PageHeader
               backIcon={
                 <Button
@@ -80,13 +90,10 @@ function Main() {
                 </Breadcrumb>
               }
               extra={
-                <ThemeSwitcher />
+                <UserOptions />
               }
-              style={{
-                padding: "10px 20px"
-              }}
             />
-          </Header>
+          </LayoutHeader>
           <Content
             className="site-layout-background"
             style={{

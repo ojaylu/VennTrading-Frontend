@@ -1,11 +1,10 @@
-import { Form, Input } from "antd";
+import { Form, Input, Typography } from "antd";
 import { useController } from "react-hook-form";
 const { Item } = Form;
 
-export default function FormInput({ name, control, rules, defaultValue="", label, required=false, errors={}, type }) {
+export default function FormInput({ name, control, rules, defaultValue="", label, required=false, errors={}, type, left, right }) {
     const { field: { onChange, value, ref } } = useController({ name, control, rules, defaultValue });
     const Component = type ? Input[type] : Input;
-    console.log(errors)
     return (
         <>
             <Item
@@ -19,7 +18,17 @@ export default function FormInput({ name, control, rules, defaultValue="", label
                     ref={ref}
                 />
             </Item>
-            <p>{errors[name]?.message}</p>
+            {
+                errors[name]?.message &&
+                <Item
+                    wrapperCol={{
+                        offset: left,
+                        span: right,
+                    }}
+                >
+                    <Typography.Text>{errors[name]?.message}</Typography.Text>
+                </Item>
+            }
         </>
     )
 }

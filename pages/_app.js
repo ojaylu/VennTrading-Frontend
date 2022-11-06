@@ -1,8 +1,8 @@
-import React from "react"
+import React from "react";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher"
 import { AuthProvider } from "components/AuthProvider";
 import PrivateRoute from "components/PrivateRoute";
-import "public/styles/styles.css"
+import "public/styles/styles.css";
 
 const themes = {
   dark: "/styles/dark-theme.css",
@@ -10,7 +10,7 @@ const themes = {
 }
 
 function MyApp({ Component, pageProps }) {
-  const protectedRoutes = new Set(["/main-page"])
+  const protectedRoutes = new Set(["/main-page"]);
 
   return (
     <ThemeSwitcherProvider themeMap={themes} defaultTheme="dark">

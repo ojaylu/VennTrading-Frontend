@@ -1,27 +1,25 @@
-import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
-import React from 'react';
-const antIcon = (
-  <LoadingOutlined
-    style={{
-      fontSize: 30,
-    }}
-    spin
-  />
-);
+import Image from 'next/image';
+import { logoWhite, logoBlack } from "utils/imagePaths"
+import { useThemeSwitcher } from 'react-css-theme-switcher';
 
 export default function Loading() {
-    return (
-        <div
-            style={{
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-            }}
-        >
-          hi
-            {/* <Spin indicator={antIcon} /> */}
-        </div>
-    )
+  const { currentTheme } = useThemeSwitcher();
+  return (
+      <div
+          style={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+          }}
+      >
+        <Image
+          src={ currentTheme == "light"? logoBlack : logoWhite }
+          width="100"
+          height="100"
+          priority
+        />
+        Loading
+      </div>
+  )
 }

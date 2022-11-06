@@ -1,25 +1,18 @@
-import { Button } from "antd";
-import { useState } from "react";
+import { Switch } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 
 function ThemeSwitcher() {
-    const [isDark, setDark] = useState(true);
-    const { switcher, themes } = useThemeSwitcher();
-
-    const switchTheme = () => {
-        console.log(isDark)
-        switcher({ theme: !isDark ?  themes.dark : themes.light })
-        setDark(value => !value)
-    }
+    const { switcher, themes, currentTheme } = useThemeSwitcher();
 
     return (
-        <Button
-            shape="circle"
-            onClick={switchTheme}
-            type="primary"
-        >
-            {!isDark ? "D" : "L" }
-        </Button>
+        <Switch
+            checkedChildren="Dark"
+            unCheckedChildren="Light"
+            checked={currentTheme == "dark"}
+            onClick={checked => {
+                switcher({ theme: checked ?  themes.dark : themes.light })
+            }}
+        />
     )
 }
 

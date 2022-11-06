@@ -1,47 +1,86 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
-import isEmpty from "lodash/isEmpty";
-import _ from "lodash";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from "firebase-config";
+import { message } from "antd";
+import loginWithPopup from "utils/firebase/loginWithPopup";
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-    const [user, setUser] = useState({});
-    const isAuthenticated = useRef(false);
+    const [user, setUser] = useState(null);
+    const [isAuthenticated, setAuthenticated] = useState(false);
     const [isLoading, setLoading] = useState(true);
 
-    // must be used 
-    const setAuthenticated = (bool) => {
-        isAuthenticated.current = bool;
-    }
-
     useEffect(() => {
-        // check is user is logged in
+        // check session storage on first render
+        setUser(auth.currentUser);
         setLoading(false);
     }, []);
 
-    function login() {
-        setLoading(true);
-        setUser({
-            name: 'hi'
+    const resetUser = () => {
+        setUser(null);
+    };
+
+    const success = (msg) => {
+        message.success(msg)
+    };
+
+    const error = (msg) => {
+        message.error(msg)
+    }
+
+    function loginWithEmail(email, password) {
+        signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+            setUser(userCredential.user);
+            success("Logged in");
+            setAuthenticated(true);
+        }).catch(err => {
+            error(err.message);
         });
-        setAuthenticated(true);
-        setLoading(false);
+    }
+
+    function loginWithThirdParty(providerName) {
+        loginWithPopup(providerName)
+            .then(({ user, token }) => {
+                setUser(user);
+                success("Logged in");
+                setAuthenticated(true);
+            }).catch(err => {
+                error(err.message);
+            });
+    }
+
+    function createUser(email, password) {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(({ user }) => {
+                setUser(user);
+                success("Created User");
+            }).catch(err => {
+                error(err.message);
+            });
     }
 
     function logout() {
-        setLoading(true);
-        setAuthenticated(false);
-        setLoading(false);
+        signOut(auth)
+        .then(() => {
+            success("Logged out");
+            setAuthenticated(false);
+            resetUser();
+        }).catch(err => {
+            error(err.message);
+        })
     }
 
     return (
         <AuthContext.Provider
             value={{
-                isAuthenticated: isAuthenticated.current,
+                isAuthenticated,
                 user,
-                login,
+                loginWithEmail,
+                loginWithThirdParty,
                 logout,
+                createUser,
                 isLoading
             }}
         >

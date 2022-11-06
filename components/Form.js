@@ -2,43 +2,37 @@ import { Children, cloneElement } from "react";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Form as AntdForm, Button } from "antd";
 import { useForm } from "react-hook-form";
+import { useAuth } from "./AuthProvider";
 const { Item } = AntdForm;
 
-export default function Form({ children, buttonAlign, schema }) {
+export default function Form({ submitHandler=()=>{}, children, schema, left=8, right=16 }) {
     const { handleSubmit, reset, control, formState: { errors } } = useForm({ reValidateMode: "onSubmit", resolver: yupResolver(schema) });
-
-    const onSubmit = data => console.log(data);
 
     return (
         <AntdForm
             className="form"
             labelCol={{
-                span: 8,
+                span: left,
               }}
             wrapperCol={{
-                span: 16,
+                span: right,
             }}
         >
             {
                 Children.map(children, child => {
-                    return cloneElement(child, { control, errors });
+                    return cloneElement(child, { control, errors, left, right });
                 })
             }
             <Item
-                // style={{
-                //     width: "100%",
-                //     display: "flex",
-                //     justifyContent: "center"
-                // }}
                 wrapperCol={{
-                    offset: 8,
-                    span: 16,
+                    offset: left,
+                    span: right,
                 }}
             >
                 <Button
                     type="primary"
                     className="submit"
-                    onClick={handleSubmit(onSubmit)}
+                    onClick={handleSubmit(submitHandler)}
                     style={{
                         color: "#FFFEF7",
                         marginRight: "10px"
@@ -47,7 +41,7 @@ export default function Form({ children, buttonAlign, schema }) {
                     Submit
                 </Button>
                 <Button
-                    type="default"
+                    type="text"
                     style={{
                         border: "none"
                     }}
