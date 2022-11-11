@@ -97,8 +97,7 @@ export default function Login() {
                     })
                 }
                 <div style={{marginTop: "10px"}}>
-                    Or <Link href="/sign-up">sign up
-                    </Link>
+                    Or <Link href="/sign-up/1">sign up</Link>
                 </div>
             </div>
         </div>

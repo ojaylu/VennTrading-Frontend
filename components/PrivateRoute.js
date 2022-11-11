@@ -5,7 +5,7 @@ import Loading from 'layouts/Loading';
 
 export default function PrivateRoute({ protectedRoutes, children }) {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user, sendVerification } = useAuth();
   const pathIsProtected = protectedRoutes.has(router.pathname);
 
   const firstUpdate = useRef(true);
@@ -26,10 +26,21 @@ export default function PrivateRoute({ protectedRoutes, children }) {
 
   useEffect(() => {
     if (!firstUpdate.current) {
+      // when user logs out
       if (!isAuthenticated) {
         router.push("/");
       } else {
-        router.push("/main-page");
+        if (typeof window != "undefined") {
+          window.user = user;
+        }
+        if (!user.displayName) {
+          router.push("/sign-up/2");
+        } else if (!user.emailVerified) {
+          sendVerification();
+          router.push("/sign-up/3");
+        } else {
+          router.push("/main-page");
+        }
       }
     }
   }, [isAuthenticated]);
