@@ -85,7 +85,7 @@ export default function index() {
         <AdvancedRealTimeChart
           autosize
           theme={currentTheme} 
-          disabled_features={["datasource_copypaste"]}
+          // disabled_features={["datasource_copypaste"]}
         />
       </div>
     </PublicPage>

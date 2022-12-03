@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+
+:root {
+    --login-color: #FAF9F6;
+}  
+
+#__next {
+    height: 100%
+}
+
+.title {
+    font-family: sans-serif;
+}
+
+.horizontal-flex-spaced {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.fit-screen {
+    min-height: 100%;
+}
+
+.login > .left > .name {
+    display: flex;
+    align-items: center;
+    border: 5px solid;
+    padding: 10px;
+    color: var(--login-color);
+    margin: 10px 0px;
+}
+
+.login > .right {
+    background-color: var(--login-color);
+    width: 400px;
+    border-radius: 25px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 30px;
+    color: #3a3b3ce6;
+    box-shadow: 0 0 40px -5px #00000053;
+    margin-bottom: 10px;
+}
+
+.sign-up  {
+    padding: 50px;
+    box-shadow: 0 0 40px -10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 45px;
+}
+
+.login > .right * {
+    color: inherit;
+}
+
+.form > * {
+    margin-top: 0px !important;
+    margin-bottom: 5px !important;
+}
+
+.form :not(.submit) {
+    color: inherit !important;
+}
+
+.ant-layout {
+    min-height: 100% !important;
+}
+
+.main-header-light {
+    color: rgba(0,0,0,.85) !important;
+}
+
+.main-header-light:hover {
+    color: inherit !important;
+}
+
+.main-header-dark {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.main-header-dark:hover {
+    color: inherit !important;
+}
+
+.ant-page-header-heading-extra {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.horizontal-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ant-layout-content {
+    padding: 30px 50px;
+}
+
+.ant-layout-content > *:not(:last-child) {
+    margin-bottom: 30px;
+}
+
+.public-page {
+    padding: unset;
+}

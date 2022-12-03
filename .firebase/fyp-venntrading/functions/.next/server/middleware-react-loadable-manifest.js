@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST={"index.js -> react-ts-tradingview-widgets":{id:492,files:["static/chunks/492.59e455b8816f9765.js"]}};

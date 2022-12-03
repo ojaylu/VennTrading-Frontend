@@ -19,7 +19,7 @@ import LayoutHeader from "components/LayoutHeader";
 const { Sider, Content } = Layout;
 const { Item } = Breadcrumb;
 
-function Main() {
+export default function Main() {
     const [collapsed, setCollapsed] = useState(false);
     const { logout } = useAuth();
     return (
@@ -108,5 +108,3 @@ function Main() {
       </Layout>
     );
 };
-
-export default Main;

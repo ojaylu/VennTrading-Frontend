@@ -8,7 +8,6 @@ import isEmpty from "lodash/isEmpty";
 import { Typography, Steps } from "antd";
 import { useAuth } from "components/AuthProvider";
 import Loading from "layouts/Loading";
-import {useState } from "react";
 
 const step1Schema = yup.object({
     email: yup.string().email().required(),
@@ -58,10 +57,8 @@ export default function SignUp() {
         }
     ]
 
-    const [inputs, setInputs] = useState({});
-
     return (
-        isEmpty(router.query) ?
+        isEmpty(router.query) ? // server-side rendering
         <Loading /> :
         (!isNaN(currentStep) &&  currentStep < steps.length?
         <PublicPage>
