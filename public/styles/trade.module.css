@@ -1,0 +1,12 @@
+.upper_panel {
+    display: flex;
+    height: 500px;
+    border: solid navajowhite;
+    align-items: stretch;
+}
+
+@media screen and (max-width: 800px) {
+    .upper_panel {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,18 @@
+.order_book {
+    height: 100%;
+    border: solid red;
+    display: flex;
+
+    * {
+        color: pink;
+        font-size: 8px;
+        padding: 0 !important;
+    }
+}
+
+.table {
+    height: 100%;
+    div:not(.exclude) {
+        height: 100%;
+    }
+}

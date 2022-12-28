@@ -3,12 +3,16 @@ import { useRouter } from 'next/router';
 import { useAuth } from 'components/AuthProvider';
 import Loading from 'layouts/Loading';
 
-export default function PrivateRoute({ protectedRoutes, children }) {
+export default function PrivateRoute({ /* protectedRoutes,*/ children }) {
   const router = useRouter();
   const { isAuthenticated, isLoading, user, sendVerification } = useAuth();
-  const pathIsProtected = protectedRoutes.has(router.pathname);
+  // const pathIsProtected = protectedRoutes.has(router.pathname);
+  const protectedRE = /^\/usr/;
+  const pathIsProtected = protectedRE.test(router.pathname);
 
-  const firstUpdate = useRef(true);
+  console.log(router.pathname, pathIsProtected)
+
+  const firstRender = useRef(true);
 
   useEffect(() => {
     /*
@@ -17,7 +21,7 @@ export default function PrivateRoute({ protectedRoutes, children }) {
       after !isLoading, redirect if !Authenticated
     */
     if (!isLoading) {
-      firstUpdate.current = false;
+      firstRender.current = false;
       if (!isAuthenticated && pathIsProtected) {
         router.push('/login');
       }
@@ -25,21 +29,19 @@ export default function PrivateRoute({ protectedRoutes, children }) {
   }, [isLoading, pathIsProtected]);
 
   useEffect(() => {
-    if (!firstUpdate.current) {
+    // after checking session storage (!isLoading)
+    if (!firstRender.current) {
       // when user logs out
       if (!isAuthenticated) {
         router.push("/");
       } else {
-        if (typeof window != "undefined") {
-          window.user = user;
-        }
         if (!user.displayName) {
           router.push("/sign-up/2");
         } else if (!user.emailVerified) {
           sendVerification();
           router.push("/sign-up/3");
         } else {
-          router.push("/main-page");
+          router.push("/usr/main");
         }
       }
     }
