@@ -1,10 +1,14 @@
 import LoggedInLayout from "layouts/logged-in/MainLayout";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
-import styles from "public/styles/trade.module.css";
 import { useState, useEffect } from "react";
 import OrderBook from "components/logged-in/OrderBook";
-import DynamicTable from "components/DynamicTable";
+import RecentTrades from "components/logged-in/RecentTrades";
+import { Panel, Container } from "layouts/Panel";
+import AllOrders from "components/logged-in/AllOrders";
+import MakeOrder from "components/logged-in/MakeOrder";
+import SymbolInfo from "components/logged-in/SymbolInfo";
+import SymbolSelector from "components/logged-in/SymbolSelector";
 
 
 export default function Trade() {
@@ -14,32 +18,42 @@ export default function Trade() {
 
 
     useEffect(() => {
-
     }, []);
 
     return (
         <LoggedInLayout>
-            <div style={{height: "100%", border: "solid green"}}>
-
-            
-                <div className={styles.upper_panel}>
-                    <div style={{flex: "1 0 20%", border: "solid yellow"}}>
-                        {/* <OrderBook symbol={symbol} /> */}
-                        <DynamicTable cols={[1,2]} data={[[1,1], [2,2]]} />
-                    </div>
-                    <div style={{flex: "1 0 60%"}}>
+            <div style={{height: "100%"}}>
+                <Panel style={{ height: "auto" }}>
+                    <Container ratio={8}>
+                        <SymbolInfo />
+                    </Container>
+                    <Container ratio={2} style={{ margin: "auto" }}>
+                        <SymbolSelector />
+                    </Container>
+                </Panel>
+                <Panel>
+                    <Container ratio={2}>
+                        <OrderBook symbol={'BTCUSDT'} />
+                    </Container>
+                    <Container ratio={6} style={{ height: "95%" }}>
                         <AdvancedRealTimeChart
-                        autosize
-                        theme={currentTheme} 
+                            autosize
+                            theme={currentTheme} 
                         // disabled_features={["datasource_copypaste"]}
                         />
-                    </div>
-                    <div
-                        style={{flex: "1 0 20%"}}
-                    >
-                        content
-                    </div>
-                </div>
+                    </Container>
+                    <Container ratio={2}>
+                        <RecentTrades symbol={'BTCUSDT'} />
+                    </Container>
+                </Panel>
+                <Panel>
+                    <Container ratio={4}>
+                        <AllOrders />
+                    </Container>
+                    <Container ratio={6}>
+                       <MakeOrder />
+                    </Container>
+                </Panel>
             </div>
         </LoggedInLayout>
     )

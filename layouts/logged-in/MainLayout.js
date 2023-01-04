@@ -5,9 +5,9 @@ import {
 import { 
   Layout, 
   Button,
-  Breadcrumb
+  Breadcrumb,
+  PageHeader
 } from "antd";
-import { PageHeader } from '@ant-design/pro-layout';
 import { useState } from "react";
 import UserOptions from "components/UserOptions.js";
 import LayoutHeader from "components/LayoutHeader";
@@ -60,7 +60,6 @@ export default function MainLayout({ children }) {
                 className="site-layout-background"
                 style={{
                     margin: '24px 16px',
-                    padding: 24,
                     backgroundColor: 'grey',
                     padding: 0
                 }}

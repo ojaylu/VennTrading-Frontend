@@ -1,7 +1,5 @@
 .upper_panel {
     display: flex;
-    height: 500px;
-    border: solid navajowhite;
     align-items: stretch;
 }
 
@@ -10,3 +8,10 @@
         flex-direction: column;
     }
 }
+
+// .container {
+//     overflow-x: hidden;
+//     * {
+//         overflow-x: scroll;
+//     }
+// }

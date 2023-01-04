@@ -1,4 +1,4 @@
-import { Button, PageHeader, Typography } from "antd";
+import { Button, Typography, PageHeader } from "antd";
 import { logoWhite, logoBlack } from "utils/imagePaths";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import Link from "next/link";

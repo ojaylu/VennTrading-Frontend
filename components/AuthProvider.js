@@ -39,11 +39,32 @@ function AuthProvider({ children }) {
         message.error(msg)
     }
 
+    function getCredCookie() {
+        fetch("http://localhost:4000/logged-in", { credentials: "include" })
+            .then(
+                res => res.json()
+            )
+            .then(
+                data => console.log(data)
+            );
+    }
+
+    function clearCredCookie() {
+        fetch("http://localhost:4000/logged-out", { credentials: "include" })
+            .then(
+                res => res.json()
+            )
+            .then(
+                data => console.log(data)
+            );
+    }
+
     function loginWithEmail(email, password) {
         signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 setUser(userCredential.user);
                 success("Logged in");
+                getCredCookie();
                 setAuthenticated(true);
             }).catch(err => {
                 error(err.message);
@@ -55,6 +76,7 @@ function AuthProvider({ children }) {
             .then(({ user, token }) => {
                 setUser(user);
                 success("Logged in");
+                getCredCookie();
                 setAuthenticated(true);
             }).catch(err => {
                 error(err.message);
@@ -88,6 +110,7 @@ function AuthProvider({ children }) {
             .then(() => {
                 success("Logged out");
                 setAuthenticated(false);
+                clearCredCookie();
                 resetUser();
             }).catch(err => {
                 error(err.message);

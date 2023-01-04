@@ -2,11 +2,16 @@ import React from "react";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher"
 import { AuthProvider } from "components/AuthProvider";
 import PrivateRoute from "components/PrivateRoute";
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import "public/styles/styles.scss";
 
+const link = createHttpLink({
+  uri: "http://localhost:4000/graphql",
+  credentials: "include"
+});
+
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  link,
   cache: new InMemoryCache(),
 });
 

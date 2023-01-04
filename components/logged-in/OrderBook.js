@@ -1,94 +1,29 @@
 import { useQuery } from '@apollo/client';
 import { GET_ORDER_BOOK } from 'gql/queries';
-import { Table } from "antd";
 import { useEffect } from 'react';
-import styles from "public/styles/order_book.module.scss";
+import DynamicTable from 'components/DynamicTable';
+import _ from "lodash";
 
-function CustomTable(props) {
-    return (
-        <div 
-            {...props} 
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                border: "solid white",
-                height: "100%"
-            }} 
-        />
-    )
-}
-
-function Row(props) {
-    return (
-        <div
-            {...props} 
-            style={{
-                width: "100%",
-                display: "flex",
-                flex: "1 0"
-            }}
-            className={styles.exclude}
-        />
-    )
-}
-
-function Cell(props) {
-    return (
-        <div 
-            {...props} 
-            style={{
-                flex: "1 0 50%"
-            }}
-            className={styles.exclude}
-        />
-    )
-}
-
-export default function OrderBook({ symbol }) {
+export default function OrderBook({ symbol, pollingInterval = 1000 }) {
     const { error, data, startPolling, stopPolling } = useQuery(GET_ORDER_BOOK, {
-        variables: {symbol: 'BTCUSDT'},
+        variables: {symbol: symbol},
         fetchPolicy: 'network-only'
     });
 
-    useEffect(() => {
-        startPolling(100000);
-        return () => {
-            stopPolling();
-        };
-    }, [symbol]);
+    // useEffect(() => {
+    //     startPolling(pollingInterval);
+    //     return () => {
+    //         stopPolling();
+    //     };
+    // }, [symbol]);
 
-    const columns = [
-        {
-            title: "Price",
-            dataIndex: "price"
-        },
-        {
-            title: "Quantity",
-            dataIndex: "qty"
-        }
-    ]
+    const asks = data?.orderBook.asks.reverse();
+    const bestAsk = data?.orderBook.asks[0][0];
+
+    const bids = data?.orderBook.bids;
+    const bestBid = data?.orderBook.bids[0][0];
 
     return (
-        <Table 
-            columns={columns} 
-            dataSource={data && [...data.orderBook.asks.reverse(), ...data.orderBook.bids]}
-            size="small"
-            pagination={false}
-            className="flex-table"
-            tableLayout="fixed"
-            // components={{
-            //     table: CustomTable,
-            //     header: {
-            //         cell: Cell,
-            //         row: Row
-            //     },
-            //     body: {
-            //         wrapper: (props) => <div {...props} className="haha" style={{display: "flex", flexDirection: "column"}}/>,
-            //         row: Row,
-            //         cell: Cell
-            //     }
-            // }}
-            // className={styles.table}
-        />
+        <DynamicTable cols={["Price", "Quantity"]} body={data && [{data: asks, style: [{color: "rgb(14, 203, 129)"}]}, {data: [[`Spread: ${_.round(bestAsk - bestBid, 3)}`, undefined]]}, {data: bids, style: [{color: "rgb(246, 70, 93)"}]}]} />
     )
 }

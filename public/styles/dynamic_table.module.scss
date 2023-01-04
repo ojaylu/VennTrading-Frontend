@@ -1,0 +1,15 @@
+.body_row:hover {
+    filter: brightness(90%) !important;
+}
+
+.light_row {
+    :not(:last-child) {
+        border-right: 1px solid rgb(217, 218, 219);
+    }
+}
+
+.dark_row {
+    :not(:last-child) {
+        border-right: 1px solid rgb(54, 60, 78);
+    }
+}
