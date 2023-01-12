@@ -1,5 +1,18 @@
 import { gql } from '@apollo/client';
 
+export const GET_USER_ASSET = gql`
+    query GetUserAsset {
+        userAssets {
+            asset
+            free
+            locked
+            freeze
+            withdrawing
+            btcValuation
+        }
+    }
+`;
+
 export const GET_ORDER_BOOK = gql`
     query GetOrderBook($symbol: String!, $limit: Int) {
         orderBook(symbol: $symbol, limit: $limit) {

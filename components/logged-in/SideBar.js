@@ -38,6 +38,13 @@ export default function SideBar() {
             },
             label: 'Trade'
         },
+        userAsset: {
+            icon: <StockOutlined />,
+            handler: () => {
+                router.push("/usr/assets");
+            },
+            label: 'Asset Details'
+        },
         logout: {
             label: (
                 <Button

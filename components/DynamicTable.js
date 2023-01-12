@@ -9,8 +9,6 @@ export default function DynamicTable({ cols, body= [] }) {
     const lenPerCol = 100 / cols.length;
     const {currentTheme} = useThemeSwitcher();
 
-    console.log(body)
-
     return (
         <div
             style={{

@@ -2,7 +2,6 @@ import { Children, cloneElement } from "react";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Form as AntdForm, Button } from "antd";
 import { useForm } from "react-hook-form";
-import { useAuth } from "./AuthProvider";
 const { Item } = AntdForm;
 
 export default function Form({ submitHandler=()=>{}, children, schema, left=8, right=16 }) {

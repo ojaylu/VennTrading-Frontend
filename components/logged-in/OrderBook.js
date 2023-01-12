@@ -17,13 +17,13 @@ export default function OrderBook({ symbol, pollingInterval = 1000 }) {
     //     };
     // }, [symbol]);
 
-    const asks = data?.orderBook.asks.reverse();
+    const reversedAsks = data? [...data?.orderBook.asks].reverse(): [];
     const bestAsk = data?.orderBook.asks[0][0];
 
     const bids = data?.orderBook.bids;
     const bestBid = data?.orderBook.bids[0][0];
 
     return (
-        <DynamicTable cols={["Price", "Quantity"]} body={data && [{data: asks, style: [{color: "rgb(14, 203, 129)"}]}, {data: [[`Spread: ${_.round(bestAsk - bestBid, 3)}`, undefined]]}, {data: bids, style: [{color: "rgb(246, 70, 93)"}]}]} />
+        <DynamicTable cols={["Price", "Quantity"]} body={data && [{data: reversedAsks, style: [{color: "rgb(14, 203, 129)"}]}, {data: [[`Spread: ${_.round(bestAsk - bestBid, 3)}`, undefined]]}, {data: bids, style: [{color: "rgb(246, 70, 93)"}]}]} />
     )
 }

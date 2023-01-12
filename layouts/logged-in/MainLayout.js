@@ -12,18 +12,20 @@ import { useState } from "react";
 import UserOptions from "components/UserOptions.js";
 import LayoutHeader from "components/LayoutHeader";
 import SideBar from "components/logged-in/SideBar";
+import { useThemeSwitcher } from "react-css-theme-switcher";
 const { Sider, Content } = Layout;
 const { Item } = Breadcrumb;
 
 export default function MainLayout({ children }) {
     const [collapsed, setCollapsed] = useState(false);
+    const { currentTheme } = useThemeSwitcher();
 
     return (
       <Layout>
         <Sider 
-          trigger={null} 
+          trigger={ null } 
           collapsible 
-          collapsed={collapsed}
+          collapsed={ collapsed }
           breakpoint="md"
           collapsedWidth={0}
           onBreakpoint={
@@ -60,8 +62,9 @@ export default function MainLayout({ children }) {
                 className="site-layout-background"
                 style={{
                     margin: '24px 16px',
-                    backgroundColor: 'grey',
-                    padding: 0
+                    padding: 0,
+                    height: "300px",
+                    backgroundColor: currentTheme == "light"? "rgb(255, 255, 255)": "rgb(38, 38, 38)"
                 }}
             >
                 { children }

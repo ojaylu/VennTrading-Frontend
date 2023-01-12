@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Table } from 'antd';
 
 export default function AllOrders({ symbol, pollingInterval = 500 }) {
-    const { error, data, startPolling, stopPolling } = useQuery(GET_ALL_ORDERS, {
+    const { error, data: orders, startPolling, stopPolling, loading } = useQuery(GET_ALL_ORDERS, {
         variables: {symbol: symbol},
         fetchPolicy: "network-only"
     });
@@ -16,7 +16,8 @@ export default function AllOrders({ symbol, pollingInterval = 500 }) {
     //     };
     // }, [symbol]);
 
-    console.log(data);
+    console.log("orders:", orders)
+
     const columns =[
         {
             title: "Price",
@@ -45,6 +46,15 @@ export default function AllOrders({ symbol, pollingInterval = 500 }) {
     ]
 
     return (
-        <Table columns={ columns } />
+        <Table 
+            columns={ columns } 
+            dataSource={ orders?.orderRecord.map((order, index) => ({...order, key: index})) } 
+            loading={ loading }
+            scroll={{
+                x: "100%"
+            }}
+            pagination={false}
+            title={() => <b>Order History</b>}
+        />
     )
 }
