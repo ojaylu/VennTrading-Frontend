@@ -1,6 +1,7 @@
 import {
     HomeOutlined,
-    StockOutlined
+    StockOutlined,
+    DollarCircleOutlined
 } from "@ant-design/icons";
 import { Menu, Button } from "antd";
 import { useAuth } from "components/AuthProvider";
@@ -39,7 +40,7 @@ export default function SideBar() {
             label: 'Trade'
         },
         userAsset: {
-            icon: <StockOutlined />,
+            icon: <DollarCircleOutlined />,
             handler: () => {
                 router.push("/usr/assets");
             },
@@ -48,7 +49,6 @@ export default function SideBar() {
         logout: {
             label: (
                 <Button
-                    onClick={logout}
                     block
                     type="text"
                     style={{
@@ -57,7 +57,8 @@ export default function SideBar() {
                 >
                     Logout
                 </Button>
-            )
+            ),
+            handler: logout
         }
     };
     

@@ -16,7 +16,9 @@ export default function RecentTrades({ symbol, pollingInterval = 500 }) {
     //     };
     // }, [symbol]);
 
+    const newToOld = data && [...data?.tradeRecord].reverse();
+
     return (
-        <DynamicTable cols={["Price", "Quantity", "Time"]} body={ data && [{data: data.tradeRecord.map(record => [_.round(record.price, 5), _.round(record.qty, 5), new Date(record.time).toLocaleTimeString('it-IT')])}] } />
+        <DynamicTable cols={["Price", "Quantity", "Time"]} body={ newToOld && [{data: newToOld.map(record => [_.round(record.price, 5), _.round(record.qty, 5), new Date(record.time).toLocaleTimeString('it-IT')])}] } />
     )
 }

@@ -13,6 +13,7 @@ import UserOptions from "components/UserOptions.js";
 import LayoutHeader from "components/LayoutHeader";
 import SideBar from "components/logged-in/SideBar";
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import styles from "public/styles/main_layout.module.scss";
 const { Sider, Content } = Layout;
 const { Item } = Breadcrumb;
 
@@ -21,7 +22,7 @@ export default function MainLayout({ children }) {
     const { currentTheme } = useThemeSwitcher();
 
     return (
-      <Layout>
+      <Layout style={{height: "100vh"}}>
         <Sider 
           trigger={ null } 
           collapsible 
@@ -36,7 +37,7 @@ export default function MainLayout({ children }) {
         >
           <SideBar />
         </Sider>
-        <Layout>
+        <Layout style={{overflowY: "scroll"}}>
             <LayoutHeader>
                 <PageHeader
                     backIcon={
@@ -59,15 +60,14 @@ export default function MainLayout({ children }) {
                 />
             </LayoutHeader>
             <Content
-                className="site-layout-background"
+                className={["site-layout-background", currentTheme == "light"? styles.light_content: styles.dark_content].join(" ")}
                 style={{
                     margin: '24px 16px',
                     padding: 0,
-                    height: "300px",
-                    backgroundColor: currentTheme == "light"? "rgb(255, 255, 255)": "rgb(38, 38, 38)"
+                    minHeight: "auto",
+                    backgroundColor: currentTheme == "light"? "rgb(255, 255, 255)": "rgb(38, 38, 38)",
                 }}
-            >
-                { children }
+            >{ children }
             </Content>
         </Layout>
       </Layout>

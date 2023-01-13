@@ -1,4 +1,6 @@
 import { Table } from "antd";
+import { useQuery } from '@apollo/client';
+import { GET_USER_ASSET } from 'gql/queries';
 
 const columns = [
     {
@@ -27,11 +29,17 @@ const columns = [
     },
 ];
 
-export default function UserAssets({ assets }) {
+export default function UserAssets() {
+    const { loading, error, data, refetch } = useQuery(GET_USER_ASSET, {
+        fetchPolicy: "network-only"
+    });
+
     return (
         <Table 
             columns={ columns }
-            dataSource={ assets.map((asset, index) => ({...asset, key: index})) }
+            rowKey="asset"
+            loading={ loading }
+            dataSource={ data?.userAssets }
             scroll={{
                 x: "100%"
             }}

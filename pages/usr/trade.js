@@ -10,8 +10,9 @@ import MakeOrder from "components/logged-in/MakeOrder";
 import SymbolInfo from "components/logged-in/SymbolInfo";
 import SymbolSelector from "components/logged-in/SymbolSelector";
 import { useRouter } from "next/router";
-import { message } from "antd";
+import { message, Tabs } from "antd";
 import _ from "lodash";
+import UserTrades from "components/logged-in/UserTrades";
 
 
 export default function Trade() {
@@ -20,11 +21,17 @@ export default function Trade() {
     const symbol = router.query?.symbol;
     const [symbols, setSymbols] = useState([]);
     const [permissions, setPermissions] = useState([]);
+    const [filters, setFilters] = useState({});
 
-    const fetchPermissions = (symbol) => {
+    const fetchSymbolInfo = (symbol) => {
         fetch(`http://localhost:4000/symbols/${symbol}`)
             .then(res => res.json())
-            .then(permissions => setPermissions(permissions))
+            .then(({orderTypes, filters}) => {
+                setPermissions(orderTypes);
+                setFilters(filters.reduce((obj, filter) => (
+                    {...obj, [filter.filterType]: filter}
+                ), {}));
+        })
             .catch((err) => message.error(`${symbol}, ${JSON.stringify(err)}`));
     };
 
@@ -39,12 +46,12 @@ export default function Trade() {
         const lastSymbol = localStorage.getItem("last-symbol");
         if (!_.isEmpty(symbols)) {
             if (lastSymbol && symbols.some(element => element.value == lastSymbol)) {
-                fetchPermissions(lastSymbol);
+                fetchSymbolInfo(lastSymbol);
                 router.push({
                     query: { symbol: lastSymbol }
                 });
             } else {
-                fetchPermissions(symbols[0].value);
+                fetchSymbolInfo(symbols[0].value);
                 router.push({
                     query: { symbol: symbols[0]?.value }
                 });
@@ -60,39 +67,52 @@ export default function Trade() {
 
     return (
         <LoggedInLayout>
-            <div style={{height: "100%"}}>
-                <Panel style={{ height: "auto" }}>
-                    <Container ratio={8}>
-                        <SymbolInfo symbol={ symbol } />
-                    </Container>
-                    <Container ratio={2} style={{ margin: "auto" }}>
-                        <SymbolSelector handler={ symbolHandler } symbols={ symbols } />
-                    </Container>
-                </Panel>
-                <Panel>
-                    <Container ratio={2}>
-                        <OrderBook symbol={ symbol } />
-                    </Container>
-                    <Container ratio={6}>
-                        <AdvancedRealTimeChart
-                            autosize
-                            theme={currentTheme} 
-                        // disabled_features={["datasource_copypaste"]}
-                        />
-                    </Container>
-                    <Container ratio={2}>
-                        <RecentTrades symbol={ symbol } />
-                    </Container>
-                </Panel>
-                <Panel>
-                    <Container ratio={4}>
-                        <AllOrders symbol={ symbol } />
-                    </Container>
-                    <Container ratio={6}>
-                       <MakeOrder symbol={ symbol } permissions={ permissions } />
-                    </Container>
-                </Panel>
-            </div>
+            <Panel style={{ height: "auto" }}>
+                <Container ratio={8}>
+                    <SymbolInfo symbol={ symbol } />
+                </Container>
+                <Container ratio={2} style={{ margin: "auto", borderLeft: "none" }}>
+                    <SymbolSelector handler={ symbolHandler } symbols={ symbols } />
+                </Container>
+            </Panel>
+            <Panel>
+                <Container ratio={2}>
+                    <OrderBook symbol={ symbol } />
+                </Container>
+                <Container ratio={6}>
+                    <AdvancedRealTimeChart
+                        autosize
+                        theme={currentTheme} 
+                    // disabled_features={["datasource_copypaste"]}
+                    />
+                </Container>
+                <Container ratio={2}>
+                    <RecentTrades symbol={ symbol } />
+                </Container>
+            </Panel>
+            <Panel>
+                <Container ratio={5} style={{overflowY: "scroll"}}>
+                    <Tabs 
+                        defaultActiveKey="viewOrders"
+                        centered
+                        items={[
+                            {
+                                label: "Orders",
+                                key: "viewOrders",
+                                children: <AllOrders symbol={ symbol } />
+                            },
+                            {
+                                label: "Trades",
+                                key: "viewTrades",
+                                children: <UserTrades symbol={ symbol } />
+                            }
+                        ]}
+                    />
+                </Container>
+                <Container ratio={5}>
+                    <MakeOrder symbol={ symbol } permissions={ permissions } filters={ filters } />
+                </Container>
+            </Panel>
         </LoggedInLayout>
     )
 }

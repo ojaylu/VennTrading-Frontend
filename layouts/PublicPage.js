@@ -2,10 +2,11 @@ import Link from "next/link";
 import { Layout } from "antd";
 import MainHeader from "components/MainHeader.js";
 import Header from "components/LayoutHeader";
+import styles from "public/styles/public_page.module.scss";
 
 const { Content, Footer } = Layout
 
-export default function({ children, className }) {
+export default function PublicPage({ children }) {
   return (
     <Layout>
       <Header>
@@ -17,7 +18,7 @@ export default function({ children, className }) {
           flexDirection: "column",
           alignItems: "center"
         }}
-        className={className}
+        className={styles.content}
       >
         {children}
       </Content>

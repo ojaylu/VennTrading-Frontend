@@ -4,7 +4,7 @@ import { Form as AntdForm, Button } from "antd";
 import { useForm } from "react-hook-form";
 const { Item } = AntdForm;
 
-export default function Form({ submitHandler=()=>{}, children, schema, left=8, right=16 }) {
+export default function Form({ submitHandler=()=>{}, children, schema, left=8, right=16, nonTxt }) {
     const { handleSubmit, reset, control, formState: { errors } } = useForm({ reValidateMode: "onSubmit", resolver: yupResolver(schema) });
 
     return (
@@ -17,6 +17,7 @@ export default function Form({ submitHandler=()=>{}, children, schema, left=8, r
                 span: right,
             }}
         >
+            {nonTxt}
             {
                 Children.map(children, child => {
                     return cloneElement(child, { control, errors, left, right });

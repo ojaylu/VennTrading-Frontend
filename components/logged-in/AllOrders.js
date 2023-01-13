@@ -5,7 +5,7 @@ import { Table } from 'antd';
 
 export default function AllOrders({ symbol, pollingInterval = 500 }) {
     const { error, data: orders, startPolling, stopPolling, loading } = useQuery(GET_ALL_ORDERS, {
-        variables: {symbol: symbol},
+        variables: {symbol},
         fetchPolicy: "network-only"
     });
 
@@ -16,9 +16,11 @@ export default function AllOrders({ symbol, pollingInterval = 500 }) {
     //     };
     // }, [symbol]);
 
-    console.log("orders:", orders)
-
     const columns =[
+        {
+            title: "Order ID",
+            dataIndex: "orderId"
+        },
         {
             title: "Price",
             dataIndex: "price"
@@ -41,20 +43,21 @@ export default function AllOrders({ symbol, pollingInterval = 500 }) {
         },
         {
             title: "Time",
-            dataIndex: "time"
+            dataIndex: "time",
+            render: time => new Date(time).toLocaleString('en-GB')
         }
     ]
 
     return (
         <Table 
             columns={ columns } 
-            dataSource={ orders?.orderRecord.map((order, index) => ({...order, key: index})) } 
+            dataSource={ orders?.orderRecord} 
+            rowKey="orderId"
             loading={ loading }
             scroll={{
                 x: "100%"
             }}
             pagination={false}
-            title={() => <b>Order History</b>}
         />
     )
 }

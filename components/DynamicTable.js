@@ -15,7 +15,7 @@ export default function DynamicTable({ cols, body= [] }) {
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
-                border: currentTheme == "light"? "rgb(217, 218, 219)": "1px solid rgb(54, 60, 78)"
+                border: currentTheme == "light"? "1px solid rgb(217, 218, 219)": "1px solid rgb(54, 60, 78)"
             }}
         >
             <div

@@ -1,17 +1,21 @@
-.upper_panel {
+.panel {
     display: flex;
     align-items: stretch;
+    height: 500px;
 }
 
 @media screen and (max-width: 800px) {
-    .upper_panel {
+    .panel {
         flex-direction: column;
+        height: auto;
     }
 }
 
-// .container {
-//     overflow-x: hidden;
-//     * {
-//         overflow-x: scroll;
-//     }
-// }
+.container {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    * {
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+}

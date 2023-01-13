@@ -1,0 +1,14 @@
+$dark_border: 1px solid rgb(54, 60, 78);
+$light_border: 1px solid rgb(217, 218, 219);
+
+.dark_container {
+    :not(:last-child) {
+        border-right: $dark_border;
+    }
+}
+
+.light_row {
+    :not(:last-child) {
+        border-right: $light_border;
+    }
+}

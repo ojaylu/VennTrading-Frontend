@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import { GoogleOutlined, FacebookFilled, GithubFilled } from "@ant-design/icons";
 import * as yup from "yup";
-import FormInput from "components/FormInput";
+import FormInput from "components/FormTextInput";
 import LoginForm from "components/Form";
 import Link from 'next/link';
 import { useThemeSwitcher } from "react-css-theme-switcher";

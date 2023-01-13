@@ -1,0 +1,6 @@
+.content {
+    padding: 0;
+    > :not(:last-child) {
+        margin-bottom: 30px;
+    }
+}

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import Error from "next/error";
 import PublicPage from "layouts/PublicPage";
 import SignUpForm from "components/Form";
-import FormInput from "components/FormInput";
+import FormInput from "components/FormTextInput";
 import * as yup from "yup";
 import isEmpty from "lodash/isEmpty";
 import { Typography, Steps } from "antd";
