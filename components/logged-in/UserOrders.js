@@ -3,7 +3,7 @@ import { GET_ALL_ORDERS } from 'gql/queries';
 import { useEffect } from 'react';
 import { Table } from 'antd';
 
-export default function AllOrders({ symbol, pollingInterval = 500 }) {
+export default function UserOrders({ symbol, pollingInterval = 500 }) {
     const { error, data: orders, startPolling, stopPolling, loading } = useQuery(GET_ALL_ORDERS, {
         variables: {symbol},
         fetchPolicy: "network-only"

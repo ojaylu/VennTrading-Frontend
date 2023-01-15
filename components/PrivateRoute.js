@@ -3,14 +3,12 @@ import { useRouter } from 'next/router';
 import { useAuth } from 'components/AuthProvider';
 import Loading from 'layouts/Loading';
 
-export default function PrivateRoute({ /* protectedRoutes,*/ children }) {
+export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHandler }) {
   const router = useRouter();
   const { isAuthenticated, isLoading, user, sendVerification } = useAuth();
   // const pathIsProtected = protectedRoutes.has(router.pathname);
   const protectedRE = /^\/usr/;
   const pathIsProtected = protectedRE.test(router.pathname);
-
-  console.log(router.pathname, pathIsProtected)
 
   const firstRender = useRef(true);
 
@@ -42,6 +40,11 @@ export default function PrivateRoute({ /* protectedRoutes,*/ children }) {
           router.push("/sign-up/3");
         } else {
           router.push("/usr/main");
+          fetch("http://localhost:4000/symbols")
+            .then(res => res.json())
+            .then(data => {
+              symbolsHandler(data.symbols);
+            });
         }
       }
     }

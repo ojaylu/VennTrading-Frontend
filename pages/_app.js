@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher"
 import { AuthProvider } from "components/AuthProvider";
 import PrivateRoute from "components/PrivateRoute";
@@ -22,14 +22,16 @@ const themes = {
 
 function MyApp({ Component, pageProps }) {
   // const protectedRoutes = new Set(["/main"]);
+  const [symbols, setSymbols] = useState([]);
+  console.log("app called")
 
   return (
     <ApolloProvider client={client}>
       <ThemeSwitcherProvider themeMap={themes} defaultTheme="dark">
         <AuthProvider>
           {/* <PrivateRoute protectedRoutes={protectedRoutes}> */}
-          <PrivateRoute>
-            <Component {...pageProps} />
+          <PrivateRoute symbolsHandler={(symbols) => setSymbols(symbols)}>
+              <Component {...pageProps} symbols={ symbols } />
           </PrivateRoute>
         </AuthProvider>
       </ThemeSwitcherProvider>

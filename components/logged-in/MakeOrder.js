@@ -1,4 +1,4 @@
-import { Tabs, Radio, Space, message } from 'antd';
+import { Tabs, Radio, message } from 'antd';
 import Form from 'components/Form';
 import FormTextInput from 'components/FormTextInput';
 import { useEffect, useState } from 'react';
@@ -7,26 +7,18 @@ import { POST_LIMIT, POST_MARKET } from 'gql/mutations';
 import * as yup from "yup";
 import { useMutation } from '@apollo/client';
 import { FormInput } from 'components/FormInput';
+import ColContainer from 'components/ColContainer';
 
 const {Group: RGroup, Button: RButton} = Radio;
-
-function Container({ children }) {
-    return (
-        <Space
-            align="center"
-            direction="vertical"
-            style={{ width: "100%", margin: "5px" }}
-        >{ children }
-        </Space>
-    )
-}
 
 function Limit({ symbol }) {
     const defaults = {
         side: "BUY",
         timeInForce: "GTC"
     }
-    const [order, setOrder] = useState({ symbol, ...defaults });
+    const [order, setOrder] = useState(defaults);
+    console.log("symbol:", symbol);
+    console.log("order value:", order);
     const schema = yup.object({
         price: yup.number().positive().required(),
         quantity: yup.number().positive().required(),
@@ -35,7 +27,8 @@ function Limit({ symbol }) {
     const [submitLimit] = useMutation(POST_LIMIT);
 
     const submitHandler = (data) => {
-        submitLimit({ variables: {...order, ...data}, fetchPolicy: "network-only" })
+        console.log(order, data);
+        submitLimit({ variables: {symbol, ...order, ...data}, fetchPolicy: "network-only" })
             .then(res => message.success("Limit order submitted"))
             .catch(e => {
                 message.error(JSON.stringify(e))
@@ -43,7 +36,7 @@ function Limit({ symbol }) {
         }
 
     return (
-        <Container>
+        <ColContainer>
             <Form schema={ schema } submitHandler={ submitHandler } left={9}
                 nonTxt={
                     [
@@ -52,21 +45,21 @@ function Limit({ symbol }) {
                                 <RButton value="BUY">BUY</RButton>
                                 <RButton value="SELL">SELL</RButton>
                             </RGroup>
-                        } label="Side" required/>,
+                        } label="Side" required key="1" />,
                         <FormInput component={
                             <RGroup onChange={binder(setOrder, "timeInForce")} defaultValue={defaults.timeInForce}>
                                 <RButton value="GTC">GTC</RButton>
                                 <RButton value="IOC">IOC</RButton>
                                 <RButton value="FOK">FOK</RButton>
                             </RGroup>
-                        } label="Time in force" required />
+                        } label="Time in force" required key="2" />
                     ]
                 }
             >
                 <FormTextInput label="Quantity" name="quantity" required />
                 <FormTextInput label="Price" name="price" required />
             </Form>
-        </Container>
+        </ColContainer>
     );
 }
 
@@ -90,7 +83,7 @@ function Market({ symbol }) {
         }
 
     return (
-        <Container>
+        <ColContainer>
             <Form schema={ schema } submitHandler={ submitHandler } left={9}
                 nonTxt={
                     [
@@ -105,32 +98,11 @@ function Market({ symbol }) {
             >
                 <FormTextInput label="Quantity" name="quantity" required />
             </Form>
-        </Container>
+        </ColContainer>
     );
 }
 
-function Filter({ title, filter }) {
- return (
-    <>
-        <b>{title}</b><br />
-        {Object.keys(filter).map((key, index) => <div key={index}>{key}: {filter[key]}</div>)
-        }
-    </>
- )
-}
-
-function Filters({ filters }) {
-    return (
-        <div>
-            {filters.PRICE_FILTER && <Filter title="Price Filter" filter={filters.PRICE_FILTER} />}
-            {filters.LOT_SIZE && <Filter title="Quantity Filter" filter={filters.LOT_SIZE} />}
-            {filters.MARKET_LOT_SIZE && <Filter title="Market Quantity Filter" filter={filters.MARKET_LOT_SIZE} />}
-            {filters.MIN_NOTIONAL && <Filter title="Minimum Notional" filter={filters.MIN_NOTIONAL} />}
-        </div>
-    )
-}
-
-export default function MakeOrder({ symbol, permissions, filters }) {
+export default function MakeOrder({ symbol, permissions }) {
     const [orderTypes, setOrderTypes] = useState([]);
 
     useEffect(() => {
@@ -154,15 +126,10 @@ export default function MakeOrder({ symbol, permissions, filters }) {
     }, [permissions]);
 
     return (
-        <div style={{height: "100%", overflowY: "scroll"}}>
-            <Tabs
-                defaultActiveKey={ orderTypes[0]?.key }
-                centered
-                items={ orderTypes }
-            />
-            <Container>
-                <Filters filters={ filters } />
-            </Container>
-        </div>
+        <Tabs
+            defaultActiveKey={ orderTypes[0]?.key }
+            centered
+            items={ orderTypes }
+        />
     );
 };

@@ -1,25 +1,25 @@
 import LoggedInLayout from "layouts/logged-in/MainLayout";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import OrderBook from "components/logged-in/OrderBook";
 import RecentTrades from "components/logged-in/RecentTrades";
 import { Panel, Container } from "layouts/Panel";
-import AllOrders from "components/logged-in/AllOrders";
+import AllOrders from "components/logged-in/UserOrders";
 import MakeOrder from "components/logged-in/MakeOrder";
 import SymbolInfo from "components/logged-in/SymbolInfo";
 import SymbolSelector from "components/logged-in/SymbolSelector";
-import { useRouter } from "next/router";
 import { message, Tabs } from "antd";
 import _ from "lodash";
 import UserTrades from "components/logged-in/UserTrades";
+import { TechnicalAnalysis } from "react-ts-tradingview-widgets";
+import Filters from "components/logged-in/Filters";
+import useSymbol from "utils/useSymbol";
 
 
-export default function Trade() {
+export default function Trade({ symbols }) {
     const { currentTheme } = useThemeSwitcher();
-    const router = useRouter();
-    const symbol = router.query?.symbol;
-    const [symbols, setSymbols] = useState([]);
+    const { symbol, setSymbol } = useSymbol(symbols);
     const [permissions, setPermissions] = useState([]);
     const [filters, setFilters] = useState({});
 
@@ -28,42 +28,18 @@ export default function Trade() {
             .then(res => res.json())
             .then(({orderTypes, filters}) => {
                 setPermissions(orderTypes);
-                setFilters(filters.reduce((obj, filter) => (
-                    {...obj, [filter.filterType]: filter}
-                ), {}));
+                setFilters(
+                    filters.reduce((obj, filter) => {
+                        const {filterType: omit, ...rest} = filter;
+                        return {...obj, [filter.filterType]: rest}
+                }, {}));
         })
             .catch((err) => message.error(`${symbol}, ${JSON.stringify(err)}`));
     };
 
-    const symbolHandler = (symbol) => {
-        router.push({
-            query: { symbol }
-        });
-        localStorage.setItem("last-symbol", symbol);
-    }
-
     useEffect(() => {
-        const lastSymbol = localStorage.getItem("last-symbol");
-        if (!_.isEmpty(symbols)) {
-            if (lastSymbol && symbols.some(element => element.value == lastSymbol)) {
-                fetchSymbolInfo(lastSymbol);
-                router.push({
-                    query: { symbol: lastSymbol }
-                });
-            } else {
-                fetchSymbolInfo(symbols[0].value);
-                router.push({
-                    query: { symbol: symbols[0]?.value }
-                });
-            }
-        }
-    }, [symbols]);
-
-    useEffect(() => {
-        fetch("http://localhost:4000/symbols")
-            .then(res => res.json())
-            .then(data => setSymbols(data.symbols));
-    }, []);
+        symbol && fetchSymbolInfo(symbol);
+    }, [symbol]);
 
     return (
         <LoggedInLayout>
@@ -72,7 +48,7 @@ export default function Trade() {
                     <SymbolInfo symbol={ symbol } />
                 </Container>
                 <Container ratio={2} style={{ margin: "auto", borderLeft: "none" }}>
-                    <SymbolSelector handler={ symbolHandler } symbols={ symbols } />
+                    <SymbolSelector handler={ setSymbol } symbols={ symbols } />
                 </Container>
             </Panel>
             <Panel>
@@ -90,8 +66,19 @@ export default function Trade() {
                     <RecentTrades symbol={ symbol } />
                 </Container>
             </Panel>
+            <Panel style={{height: "450px"}}>
+                <Container ratio={3}>
+                    <TechnicalAnalysis colorTheme={currentTheme} width="100%" symbol={`BINANCE:${symbol}`} />
+                </Container>
+                <Container ratio={3}>
+                    <MakeOrder symbol={ symbol } permissions={ permissions } />
+                </Container>
+                <Container ratio={3}>
+                    <Filters filters={ filters } />
+                </Container>
+            </Panel>
             <Panel>
-                <Container ratio={5} style={{overflowY: "scroll"}}>
+                <Container ratio={1} style={{overflowY: "scroll"}}>
                     <Tabs 
                         defaultActiveKey="viewOrders"
                         centered
@@ -108,9 +95,6 @@ export default function Trade() {
                             }
                         ]}
                     />
-                </Container>
-                <Container ratio={5}>
-                    <MakeOrder symbol={ symbol } permissions={ permissions } filters={ filters } />
                 </Container>
             </Panel>
         </LoggedInLayout>

@@ -48,12 +48,6 @@ export default function MainLayout({ children }) {
                         />
                     }
                     onBack={() => {}}
-                    title={
-                        <Breadcrumb>
-                          <Item>a</Item>
-                          <Item>b</Item>
-                        </Breadcrumb>
-                    }
                     extra={
                         <UserOptions />
                     }
@@ -67,7 +61,8 @@ export default function MainLayout({ children }) {
                     minHeight: "auto",
                     backgroundColor: currentTheme == "light"? "rgb(255, 255, 255)": "rgb(38, 38, 38)",
                 }}
-            >{ children }
+            >
+              { children }
             </Content>
         </Layout>
       </Layout>
