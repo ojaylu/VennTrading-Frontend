@@ -30,21 +30,28 @@ export default function SideBar() {
             handler: () => {
                 router.push("/usr/main");
             },
-            label: 'Home'
+            label: "Home"
         },
         trade: {
             icon: <StockOutlined />,
             handler: () => {
                 router.push("/usr/trade");
             },
-            label: 'Trade'
+            label: "Trade"
         },
         userAsset: {
             icon: <DollarCircleOutlined />,
             handler: () => {
                 router.push("/usr/assets");
             },
-            label: 'Asset Details'
+            label: "Asset Details"
+        },
+        historyOverview: {
+            icon: <DollarCircleOutlined />,
+            handler: () => {
+                router.push("/usr/history-overview");
+            },
+            label: "History Overview"
         },
         logout: {
             label: (

@@ -3,7 +3,7 @@ import { GET_ALL_ORDERS } from 'gql/queries';
 import { useEffect } from 'react';
 import { Table } from 'antd';
 
-export default function UserOrders({ symbol, pollingInterval = 500 }) {
+export default function UserOrders({ symbol, pollingInterval = 500, pagination }) {
     const { error, data: orders, startPolling, stopPolling, loading } = useQuery(GET_ALL_ORDERS, {
         variables: {symbol},
         fetchPolicy: "network-only"
@@ -54,10 +54,15 @@ export default function UserOrders({ symbol, pollingInterval = 500 }) {
             dataSource={ orders?.orderRecord} 
             rowKey="orderId"
             loading={ loading }
+            style={{
+                width: "100%"
+            }}
             scroll={{
                 x: "100%"
             }}
-            pagination={false}
+            pagination={{
+                hideOnSinglePage: true
+            }}
         />
     )
 }

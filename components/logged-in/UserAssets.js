@@ -40,6 +40,9 @@ export default function UserAssets() {
             rowKey="asset"
             loading={ loading }
             dataSource={ data?.userAssets }
+            style={{
+                width: "100%"
+            }}
             scroll={{
                 x: "100%"
             }}

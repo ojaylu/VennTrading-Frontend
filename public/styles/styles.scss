@@ -8,7 +8,7 @@ $login-color: #FAF9F6;
 }
 
 body {
-    min-height: 100vh;
+    height: 100vh;
 }
 
 .ant-layout {
@@ -22,6 +22,7 @@ body {
 
 .fit-screen {
     min-height: 100%;
+    width: 100%;
 }
 
 .horizontal-flex-spaced {
@@ -40,7 +41,7 @@ body {
     margin: 10px 0px;
 }
 
-.login > .right {
+.right {
     background-color: $login-color;
     width: 400px;
     border-radius: 25px;
@@ -50,9 +51,13 @@ body {
     align-items: center;
     justify-content: center;
     padding: 10px 30px;
-    color: #3a3b3ce6;
     box-shadow: 0 0 40px -5px #00000053;
-    margin-bottom: 10px;
+    margin: 40px 10px;
+    .venn-form, .venn-text {
+        &, *:not(.venn-submit *) {
+            color: #3a3b3ce6;
+        }
+    }
 }
 
 .sign-up  {
@@ -65,17 +70,9 @@ body {
     border-radius: 45px;
 }
 
-.login > .right * {
-    color: inherit;
-}
-
 .form > * {
     margin-top: 0px !important;
     margin-bottom: 5px !important;
-}
-
-.form :not(.submit) {
-    color: inherit !important;
 }
 
 .main-header-light {

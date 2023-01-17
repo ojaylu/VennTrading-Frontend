@@ -9,7 +9,7 @@ export default function Form({ submitHandler=()=>{}, children, schema, left=8, r
 
     return (
         <AntdForm
-            className="form"
+            className="form venn-form"
             labelCol={{
                 span: left,
               }}
@@ -31,7 +31,7 @@ export default function Form({ submitHandler=()=>{}, children, schema, left=8, r
             >
                 <Button
                     type="primary"
-                    className="submit"
+                    className="submit venn-submit"
                     onClick={handleSubmit(submitHandler)}
                     style={{
                         color: "#FFFEF7",

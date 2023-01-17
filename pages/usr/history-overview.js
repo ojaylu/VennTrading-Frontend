@@ -11,20 +11,12 @@ export default function HistoryOverview({ symbols }) {
 
     return (
         <LoggedInLayout>
-            <Panel style={{ height: "auto" }}>
-                <Container ratio={8}>
-                    hi
-                </Container>
-                <Container ratio={2} style={{ margin: "auto", borderLeft: "none" }}>
-                    <SymbolSelector handler={ symbolHandler } symbols={ symbols } />
-                </Container>
-            </Panel>
             <PageHeader title="Order History" />
-            <Panel>
+            <Panel style={{overflowY: "scroll"}}>
                 <UserOrders />
             </Panel>
             <PageHeader title="Trade History" />
-            <Panel>
+            <Panel style={{overflowY: "scroll"}}>
                 <UserTrades />
             </Panel>
         </LoggedInLayout>

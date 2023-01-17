@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import _ from "lodash";
 
 export default function useSymbol(symbols) {
     const router = useRouter();

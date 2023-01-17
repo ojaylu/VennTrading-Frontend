@@ -4,11 +4,11 @@ const { Item } = Form;
 
 // no nd to fill in control, error, left, right
 // rules and defaultValue are optional
-export default function FormTextInput({ name, rules, defaultValue="", label, required=false, type, control, errors={}, left, right }) {
+export default function FormTextInput({ name, label, rules, defaultValue="", required=false, type, control, errors={}, left, right }) {
     const { field: { onChange, value, ref } } = useController({ name, control, rules, defaultValue });
     const Component = type ? Input[type] : Input;
     return (
-        <>
+        <div className="text-input">
             <Item
                 required={required}
                 label={label}
@@ -31,6 +31,6 @@ export default function FormTextInput({ name, rules, defaultValue="", label, req
                     <Typography.Text>{errors[name]?.message}</Typography.Text>
                 </Item>
             }
-        </>
+        </div>
     )
 }

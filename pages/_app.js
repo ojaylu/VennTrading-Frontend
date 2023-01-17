@@ -22,8 +22,88 @@ const themes = {
 
 function MyApp({ Component, pageProps }) {
   // const protectedRoutes = new Set(["/main"]);
-  const [symbols, setSymbols] = useState([]);
-  console.log("app called")
+  const [symbols, setSymbols] = useState([
+      {
+        "value": "BNBBUSD",
+        "label": "BNBBUSD"
+      },
+      {
+        "label": "BTCBUSD",
+        "value": "BTCBUSD"
+      },
+      {
+        "value": "ETHBUSD",
+        "label": "ETHBUSD"
+      },
+      {
+        "value": "LTCBUSD",
+        "label": "LTCBUSD"
+      },
+      {
+        "value": "TRXBUSD",
+        "label": "TRXBUSD"
+      },
+      {
+        "label": "XRPBUSD",
+        "value": "XRPBUSD"
+      },
+      {
+        "label": "BNBUSDT",
+        "value": "BNBUSDT"
+      },
+      {
+        "value": "BTCUSDT",
+        "label": "BTCUSDT"
+      },
+      {
+        "label": "ETHUSDT",
+        "value": "ETHUSDT"
+      },
+      {
+        "label": "LTCUSDT",
+        "value": "LTCUSDT"
+      },
+      {
+        "value": "TRXUSDT",
+        "label": "TRXUSDT"
+      },
+      {
+        "value": "XRPUSDT",
+        "label": "XRPUSDT"
+      },
+      {
+        "value": "BNBBTC",
+        "label": "BNBBTC"
+      },
+      {
+        "label": "ETHBTC",
+        "value": "ETHBTC"
+      },
+      {
+        "value": "LTCBTC",
+        "label": "LTCBTC"
+      },
+      {
+        "label": "TRXBTC",
+        "value": "TRXBTC"
+      },
+      {
+        "label": "XRPBTC",
+        "value": "XRPBTC"
+      },
+      {
+        "value": "LTCBNB",
+        "label": "LTCBNB"
+      },
+      {
+        "value": "TRXBNB",
+        "label": "TRXBNB"
+      },
+      {
+        "value": "XRPBNB",
+        "label": "XRPBNB"
+      }
+    ]);
 
   return (
     <ApolloProvider client={client}>

@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 import { GoogleOutlined, FacebookFilled, GithubFilled } from "@ant-design/icons";
 import * as yup from "yup";
 import FormInput from "components/FormTextInput";
@@ -31,7 +31,8 @@ export default function Login() {
             style={{
                 background: currentTheme == "light" ? 
                     "linear-gradient(to right, #b6fbff, #83a4d4)" : 
-                    "linear-gradient(to right, #434343 0%, black 100%)"
+                    "linear-gradient(to right, #434343 0%, black 100%)",
+                minHeight: "100vh"
             }}
         >
             <div
@@ -53,7 +54,7 @@ export default function Login() {
             <div
                 className="right"
             >
-                <h2><b>Login</b></h2>
+                <Typography.Title level={3} className="venn-text">Login</Typography.Title>
                 <LoginForm
                     schema={schema}
                     submitHandler={loginHandler}
@@ -66,8 +67,9 @@ export default function Login() {
                         display: "flex",
                         alignItems: "center",
                         width: "100%",
-                        margin: "20px"
+                        margin: "20px",
                     }}
+                    className="venn-text"
                 >
                     <hr style={{flex: "auto"}}/>
                     <p style={{margin: "0 10px"}}>Or sign in using</p>
@@ -96,7 +98,7 @@ export default function Login() {
                         )
                     })
                 }
-                <div style={{marginTop: "10px"}}>
+                <div style={{marginTop: "10px"}} className="venn-text">
                     Or <Link href="/sign-up/1">sign up</Link>
                 </div>
             </div>

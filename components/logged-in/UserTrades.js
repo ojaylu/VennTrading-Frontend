@@ -52,10 +52,15 @@ export default function UserTrades({ symbol }) {
             dataSource={ data?.userTradeRecord }
             rowKey="id"
             loading={ loading }
+            style={{
+                width: "100%"
+            }}
             scroll={{
                 x: "100%"
             }}
-            pagination={false}
+            pagination={{
+                hideOnSinglePage: true
+            }}
         />
     )
 }
