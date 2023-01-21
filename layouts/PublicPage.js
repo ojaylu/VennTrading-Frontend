@@ -7,10 +7,15 @@ import styles from "public/styles/public_page.module.scss";
 const { Content, Footer } = Layout
 
 export default function PublicPage({ children }) {
+  const routes  = [
+    {label: "Introduction", path: "/"},
+    {label: "Contact Us",  path: "/contact-us"}
+  ];
+
   return (
     <Layout>
       <Header>
-        <MainHeader />
+        <MainHeader routes={routes} />
       </Header>
       <Content
         style={{

@@ -4,11 +4,7 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import Link from "next/link";
 import UserOptions from "./UserOptions";
 
-export default function MainHeader() {
-  const routes  = [
-    {label: "Introduction", path: "/"},
-    {label: "Contact Us",  path: "/contact-us"}
-  ];
+export default function MainHeader({ routes }) {
   const { currentTheme } = useThemeSwitcher();
   
   const routeLinks = routes.map((route, index) => {
