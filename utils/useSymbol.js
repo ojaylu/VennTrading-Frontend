@@ -1,37 +1,41 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import _ from "lodash";
 
 export default function useSymbol(symbols) {
     const router = useRouter();
     const symbol = router.query?.symbol;
-
-    console.log("usesymbol called");
-    console.log("symbols:", symbols);
-    console.log("symbol:", symbol);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log("called")
         const lastSymbol = localStorage.getItem("last-symbol");
         if (!_.isEmpty(symbols)) {
-            if (lastSymbol && symbols.some(element => element.value == lastSymbol)) {
+            if (symbol && symbols.some(_symbol => _symbol == symbol)) {
+                setLoading(false);
+                localStorage.setItem("last-symbol", symbol);
+            } else if (lastSymbol && symbols.some(_symbol => _symbol == lastSymbol)) {
+                setLoading(true);
                 router.push({
                     query: { symbol: lastSymbol }
                 });
             } else {
+                setLoading(true);
                 router.push({
-                    query: { symbol: symbols[0]?.value }
+                    query: { symbol: symbols[0] }
                 });
             }
         }
-    }, [symbols]);
+    }, [JSON.stringify(symbols), symbol]);
 
-    const setSymbol = symbol? (symbol) => {
-            router.push({
-                query: { symbol }
-            });
-            localStorage.setItem("last-symbol", symbol);
-        }: () => {};
+    const setSymbol = (newSymbol) => {
+            if (symbol != newSymbol) {
+                setLoading(true);
+                router.push({
+                    query: { newSymbol }
+                });
+                localStorage.setItem("last-symbol", newSymbol);
+            }
+        };
 
-    return { symbol, setSymbol };
+    return { symbol, setSymbol, loading };
 }

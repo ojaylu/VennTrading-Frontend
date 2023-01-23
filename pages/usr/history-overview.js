@@ -5,19 +5,27 @@ import LoggedInLayout from "layouts/logged-in/MainLayout";
 import { Panel, Container } from "layouts/Panel";
 import SymbolSelector from "components/logged-in/SymbolSelector";
 import useSymbol from "utils/useSymbol";
+import styles from "public/styles/main_layout.module.scss";
 
 export default function HistoryOverview({ symbols }) {
-    const { symbol, setSymbol } = useSymbol(symbols);
+    const { symbol, setSymbol, laoding } = useSymbol(symbols);
 
     return (
         <LoggedInLayout>
-            <PageHeader title="Order History" />
-            <Panel style={{overflowY: "scroll"}}>
-                <UserOrders />
+            <Panel style={{ height: "auto" }}>
+                <Container ratio={8} style={{ borderRight: "none" }}>
+                    <PageHeader title="Order History" />
+                </Container>
+                <Container ratio={2} style={{ margin: "auto" }}>
+                    <SymbolSelector handler={ setSymbol } symbols={ symbols } />
+                </Container>
             </Panel>
-            <PageHeader title="Trade History" />
             <Panel style={{overflowY: "scroll"}}>
-                <UserTrades />
+                <UserOrders symbol={symbol} />
+            </Panel>
+            <PageHeader title="Trade History" className={styles.panel} />
+            <Panel style={{overflowY: "scroll"}}>
+                <UserTrades symbol={symbol} />
             </Panel>
         </LoggedInLayout>
     )

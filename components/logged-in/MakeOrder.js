@@ -37,7 +37,7 @@ function Limit({ symbol }) {
 
     return (
         <ColContainer>
-            <Form schema={ schema } submitHandler={ submitHandler } left={9}
+            <Form schema={ schema } submitHandler={ submitHandler } left={9} style={{height: "100%", overflow: "scroll"}}
                 nonTxt={
                     [
                         <FormInput component={
@@ -84,7 +84,7 @@ function Market({ symbol }) {
 
     return (
         <ColContainer>
-            <Form schema={ schema } submitHandler={ submitHandler } left={9}
+            <Form schema={ schema } submitHandler={ submitHandler } left={9} style={{overflow: "scroll", height: "100%"}}
                 nonTxt={
                     [
                         <FormInput component={
@@ -130,6 +130,7 @@ export default function MakeOrder({ symbol, permissions }) {
             defaultActiveKey={ orderTypes[0]?.key }
             centered
             items={ orderTypes }
+            style={{overflow: "scroll"}}
         />
     );
 };

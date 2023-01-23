@@ -61,7 +61,7 @@ export default function SignUp() {
         isEmpty(router.query) ? // server-side rendering
         <Loading /> :
         (!isNaN(currentStep) &&  currentStep < steps.length?
-        <PublicPage>
+        <PublicPage style={{marginTop: "30px"}}>
             <Steps
                 current={currentStep}
                 style={{

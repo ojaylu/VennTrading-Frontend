@@ -6,7 +6,7 @@ import styles from "public/styles/public_page.module.scss";
 
 const { Content, Footer } = Layout
 
-export default function PublicPage({ children }) {
+export default function PublicPage({ children, style }) {
   const routes  = [
     {label: "Introduction", path: "/"},
     {label: "Contact Us",  path: "/contact-us"}
@@ -21,15 +21,17 @@ export default function PublicPage({ children }) {
         style={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center"
+          alignItems: "center",
+          ...style
         }}
         className={styles.content}
       >
         {children}
       </Content>
-      <Footer>
-        <Link href="/test-loading">hi</Link>
-        <Link href="/login">hi</Link>
+      <Footer style={{textAlign: "center"}}>
+        @VennTrading
+        {/* <Link href="/test-loading">hi</Link>
+        <Link href="/login">hi</Link> */}
       </Footer>
     </Layout>
   )

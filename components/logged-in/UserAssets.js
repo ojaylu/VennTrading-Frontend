@@ -29,7 +29,7 @@ const columns = [
     },
 ];
 
-export default function UserAssets() {
+export default function UserAssets({ className }) {
     const { loading, error, data, refetch } = useQuery(GET_USER_ASSET, {
         fetchPolicy: "network-only"
     });
@@ -49,6 +49,7 @@ export default function UserAssets() {
             pagination={{
                 hideOnSinglePage: true
             }}
+            className={className}
         />
     )
 }

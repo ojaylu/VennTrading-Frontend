@@ -61,3 +61,18 @@ export const GET_USER_TRADES = gql`
         }
     }
 `;
+
+export const GET_WINDOW_STATS = gql`
+    query GetWindowStats($symbol: String!, $interval: String!) {
+        windowStats(symbol: $symbol, interval: $interval) {
+            priceChange
+            priceChangePercent
+            weightedAvgPrice
+            highPrice
+            lowPrice
+            lastPrice
+            volume
+            count
+        }
+    }
+`;

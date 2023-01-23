@@ -52,9 +52,9 @@ export default function Filters({ filters }) {
         //     {filters.MARKET_LOT_SIZE && <Filter title="Market Quantity Filter" filter={filters.MARKET_LOT_SIZE} />}
         //     {filters.MIN_NOTIONAL && <Filter title="Minimum Notional" filter={filters.MIN_NOTIONAL} />}
         // </ColContainer>
-        <ColContainer title="Filters">
-            <div style={{ overflow: "scroll" }}>
-            <Tree 
+        <ColContainer title="Filters" style={{ overflowY: "scroll" }}>
+            <div style={{ overflowY: "scroll" }}>
+                <Tree 
                     treeData={ treeData }
                 />
             </div>

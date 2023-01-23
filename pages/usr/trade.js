@@ -15,11 +15,12 @@ import UserTrades from "components/logged-in/UserTrades";
 import { TechnicalAnalysis } from "react-ts-tradingview-widgets";
 import Filters from "components/logged-in/Filters";
 import useSymbol from "utils/useSymbol";
+import Ticker from "components/logged-in/Ticker";
 
 
 export default function Trade({ symbols }) {
     const { currentTheme } = useThemeSwitcher();
-    const { symbol, setSymbol } = useSymbol(symbols);
+    const { symbol, setSymbol, loading } = useSymbol(symbols);
     const [permissions, setPermissions] = useState([]);
     const [filters, setFilters] = useState({});
 
@@ -33,7 +34,7 @@ export default function Trade({ symbols }) {
                         const {filterType: omit, ...rest} = filter;
                         return {...obj, [filter.filterType]: rest}
                 }, {}));
-        })
+            })
             .catch((err) => message.error(`${symbol}, ${JSON.stringify(err)}`));
     };
 
@@ -42,14 +43,18 @@ export default function Trade({ symbols }) {
     }, [symbol]);
 
     return (
+        loading ||
         <LoggedInLayout>
             <Panel style={{ height: "auto" }}>
-                <Container ratio={8}>
+                <Container ratio={8} style={{ borderRight: "none" }}>
                     <SymbolInfo symbol={ symbol } />
                 </Container>
-                <Container ratio={2} style={{ margin: "auto", borderLeft: "none" }}>
+                <Container ratio={2} style={{ margin: "auto" }}>
                     <SymbolSelector handler={ setSymbol } symbols={ symbols } />
                 </Container>
+            </Panel>
+            <Panel style={{ height: "auto", padding: "0px 20px" }}>
+                <Ticker symbol={symbol} />
             </Panel>
             <Panel>
                 <Container ratio={2}>

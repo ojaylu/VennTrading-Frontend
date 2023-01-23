@@ -5,6 +5,7 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import PublicPage from "layouts/PublicPage";
 import Form from "components/Form";
 import FormInput from "components/FormTextInput"
+import { contactUs } from "utils/imagePaths";
 
 export default function ContactUs() {
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,11 @@ export default function ContactUs() {
     <PublicPage className="public-page">
       <div
         className="horizontal-flex-spaced fit-screen"
-        style={{justifyContent: "space-evenly"}}
+        style={{
+          justifyContent: "space-evenly",
+          backgroundImage: `url(${contactUs})`,
+          backgroundSize: "cover",
+        }}
       >
         <div
           className="left"

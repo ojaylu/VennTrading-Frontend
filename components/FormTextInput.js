@@ -8,7 +8,7 @@ export default function FormTextInput({ name, label, rules, defaultValue="", req
     const { field: { onChange, value, ref } } = useController({ name, control, rules, defaultValue });
     const Component = type ? Input[type] : Input;
     return (
-        <div className="text-input">
+        <div className="text-input" style={{overflow: "scroll"}}>
             <Item
                 required={required}
                 label={label}
@@ -28,7 +28,7 @@ export default function FormTextInput({ name, label, rules, defaultValue="", req
                         span: right,
                     }}
                 >
-                    <Typography.Text>{errors[name]?.message}</Typography.Text>
+                    <Typography.Text style={{overflow: "scroll"}}>{errors[name]?.message}</Typography.Text>
                 </Item>
             }
         </div>
