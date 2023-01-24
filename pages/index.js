@@ -13,7 +13,7 @@ const AdvancedRealTimeChart = dynamic(
   }
 );
 
-export default function index() {
+export default function Index() {
   const [loading, setLoading] = useState(false);
   const { currentTheme } = useThemeSwitcher();
   const router = useRouter();

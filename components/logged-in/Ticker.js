@@ -31,8 +31,8 @@ export default function Ticker({ symbol }) {
             <div style={{display: "flex", overflowX: "scroll", marginRight: "5px"}} className={styles.stats}>
                 {
                     data? 
-                    stats.map(field => (
-                        <Statistic title={field.title} value={data.windowStats[field.key]} />
+                    stats.map((field, index) => (
+                        <Statistic title={field.title} value={data.windowStats[field.key]} key={index} />
                     )): <></>
                 }
             </div>

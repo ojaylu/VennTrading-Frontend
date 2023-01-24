@@ -17,8 +17,6 @@ function Limit({ symbol }) {
         timeInForce: "GTC"
     }
     const [order, setOrder] = useState(defaults);
-    console.log("symbol:", symbol);
-    console.log("order value:", order);
     const schema = yup.object({
         price: yup.number().positive().required(),
         quantity: yup.number().positive().required(),
@@ -36,7 +34,7 @@ function Limit({ symbol }) {
         }
 
     return (
-        <ColContainer>
+        <ColContainer key="limit">
             <Form schema={ schema } submitHandler={ submitHandler } left={9} style={{height: "100%", overflow: "scroll"}}
                 nonTxt={
                     [
@@ -83,7 +81,7 @@ function Market({ symbol }) {
         }
 
     return (
-        <ColContainer>
+        <ColContainer key="market">
             <Form schema={ schema } submitHandler={ submitHandler } left={9} style={{overflow: "scroll", height: "100%"}}
                 nonTxt={
                     [
@@ -92,7 +90,7 @@ function Market({ symbol }) {
                                 <RButton value="BUY">BUY</RButton>
                                 <RButton value="SELL">SELL</RButton>
                             </RGroup>
-                        } label="Side" required/>,
+                        } label="Side" required key="1"/>,
                     ]
                 }
             >
