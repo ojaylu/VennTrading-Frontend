@@ -13,7 +13,6 @@
     "@hookform/resolvers": "^2.9.10",
     "antd": "^4.24.6",
     "ccxt": "^2.2.30",
-    "dotenv": "^16.0.3",
     "firebase": "^9.12.1",
     "graphql": "^16.6.0",
     "lodash": "^4.17.21",
