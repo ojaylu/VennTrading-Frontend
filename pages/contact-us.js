@@ -6,6 +6,14 @@ import PublicPage from "layouts/PublicPage";
 import Form from "components/Form";
 import FormInput from "components/FormTextInput"
 import { contactUs } from "utils/imagePaths";
+import { sendEmail } from "utils/emailJS";
+import { string, object } from "yup";
+
+const schema = object({
+  name: string().required(),
+  email: string().email().required(),
+  enquiry: string().required()
+})
 
 export default function ContactUs() {
   const [loading, setLoading] = useState(false);
@@ -36,7 +44,7 @@ export default function ContactUs() {
         <div
           className="right"
         >
-          <Form>
+          <Form submitHandler={sendEmail} schema={schema}>
             <FormInput name="name" label="Your Name" />
             <FormInput name="email" label="Your Email" />
             <FormInput name="enquiry" label="Your Enquiry" type="TextArea" />

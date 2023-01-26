@@ -33,7 +33,10 @@ export default function Form({ submitHandler=()=>{}, children, schema, left=8, r
                 <Button
                     type="primary"
                     className="submit venn-submit"
-                    onClick={handleSubmit(submitHandler)}
+                    onClick={handleSubmit(data => {
+                        submitHandler(data);
+                        reset();
+                    })}
                     style={{
                         color: "#FFFEF7",
                         marginRight: "10px"
@@ -46,7 +49,7 @@ export default function Form({ submitHandler=()=>{}, children, schema, left=8, r
                     style={{
                         border: "none"
                     }}
-                    onClick={reset}
+                    onClick={() => reset()}
                 >
                     Reset
                 </Button>
