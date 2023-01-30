@@ -9,12 +9,12 @@ export default function RecentTrades({ symbol, pollingInterval = 500 }) {
         fetchPolicy: "network-only"
     });
 
-    // useEffect(() => {
-    //     startPolling(pollingInterval);
-    //     return () => {
-    //         stopPolling();
-    //     };
-    // }, [symbol]);
+    useEffect(() => {
+        startPolling(pollingInterval);
+        return () => {
+            stopPolling();
+        };
+    }, [symbol]);
 
     const newToOld = data && [...data?.tradeRecord].reverse();
 

@@ -10,12 +10,12 @@ export default function OrderBook({ symbol, pollingInterval = 1000 }) {
         fetchPolicy: 'network-only'
     });
 
-    // useEffect(() => {
-    //     startPolling(pollingInterval);
-    //     return () => {
-    //         stopPolling();
-    //     };
-    // }, [symbol]);
+    useEffect(() => {
+        startPolling(pollingInterval);
+        return () => {
+            stopPolling();
+        };
+    }, [symbol]);
 
     const reversedAsks = data? [...data?.orderBook.asks].reverse(): [];
     const bestAsk = data?.orderBook.asks[0][0];

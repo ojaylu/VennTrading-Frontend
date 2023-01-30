@@ -10,15 +10,19 @@ export default function useSymbol(symbols) {
     useEffect(() => {
         const lastSymbol = localStorage.getItem("last-symbol");
         if (!_.isEmpty(symbols)) {
+            console.log("symbols not empty");
             if (symbol && symbols.some(_symbol => _symbol == symbol)) {
+                console.log("symbol:", symbol)
                 setLoading(false);
                 localStorage.setItem("last-symbol", symbol);
             } else if (lastSymbol && symbols.some(_symbol => _symbol == lastSymbol)) {
+                console.log("has local:", lastSymbol);
                 setLoading(true);
                 router.push({
                     query: { symbol: lastSymbol }
                 });
             } else {
+                console.log("no local:", symbols[0]);
                 setLoading(true);
                 router.push({
                     query: { symbol: symbols[0] }

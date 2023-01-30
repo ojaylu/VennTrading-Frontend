@@ -6,12 +6,8 @@ import _ from 'lodash';
 import styles from "public/styles/main_layout.module.scss";
 
 export default function AssetsOverview({ symbols }) {
-    console.log("before hook")
     const { symbol, setSymbol, loading } = useSymbol(symbols);
-
-    console.log("after hook");
-    console.log(loading)
-
+    
     return (
         loading ||
         <LoggedInLayout>

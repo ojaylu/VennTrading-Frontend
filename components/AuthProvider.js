@@ -15,7 +15,7 @@ const AuthContext = createContext();
 
 function AuthProvider({ children }) {
     const [user, setUser] = useState(auth.currentUser);
-    const [isAuthenticated, setAuthenticated] = useState(true);
+    const [isAuthenticated, setAuthenticated] = useState(false);
     const [isLoading, setLoading] = useState(true);
     const router = useRouter();
 
