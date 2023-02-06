@@ -22,7 +22,15 @@ const themes = {
 
 function MyApp({ Component, pageProps }) {
   // const protectedRoutes = new Set(["/main"]);
-  const [symbols, setSymbols] = useState([]);
+  const [symbols, setSymbols] = useState([
+    'BNBBUSD', 'BTCBUSD', 'ETHBUSD',
+    'LTCBUSD', 'TRXBUSD', 'XRPBUSD',
+    'BNBUSDT', 'BTCUSDT', 'ETHUSDT',
+    'LTCUSDT', 'TRXUSDT', 'XRPUSDT',
+    'BNBBTC',  'ETHBTC',  'LTCBTC',
+    'TRXBTC',  'XRPBTC',  'LTCBNB',
+    'TRXBNB',  'XRPBNB'
+  ]);
 
   return (
     <ApolloProvider client={client}>

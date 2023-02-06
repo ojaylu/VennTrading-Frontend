@@ -23,6 +23,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.38.0",
     "react-ts-tradingview-widgets": "^1.0.12",
+    "react-use-websocket": "^4.2.0",
     "sharp": "^0.31.2",
     "yup": "^0.32.11"
   },
