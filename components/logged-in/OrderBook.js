@@ -2,11 +2,11 @@ import { useQuery } from '@apollo/client';
 import { GET_ORDER_BOOK } from 'gql/queries';
 import DynamicTable from 'components/DynamicTable';
 import _ from "lodash";
-import { useBinWS } from 'utils/useBinWS';
+import { useBinData } from 'utils/binanceHooks';
 
 // symbol must be lower case
 export default function OrderBook({ symbol, pollingInterval = 1000 }) {
-    const data = useBinWS(symbol, "depth10", undefined);
+    const data = useBinData({ symbol, stream: "depth10", defaultValue: undefined });
     const reversedAsks = data? [...data?.asks].reverse(): [];
     const bestAsk = data?.asks[0][0];
 

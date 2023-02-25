@@ -3,12 +3,17 @@ import { gql } from '@apollo/client';
 export const GET_USER_ASSET = gql`
     query GetUserAsset {
         userAssets {
-            asset
-            free
-            locked
-            freeze
-            withdrawing
-            btcValuation
+            assetList
+            assets {
+                asset
+                free
+                locked
+                freeze
+                withdrawing
+                ipoable
+                btcValuation
+                total
+            }
         }
     }
 `;

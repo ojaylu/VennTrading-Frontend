@@ -1,8 +1,12 @@
 import useWebSocket from "react-use-websocket";
 import { useEffect } from 'react';
 
-export function useBinWS(symbol, stream, defaultValue) {
-    const { lastJsonMessage, sendJsonMessage } = useWebSocket("wss://stream.binance.com:9443/stream");
+const binanceApi = "wss://stream.binance.com:9443/stream";
+
+export function useBinData({ symbol, stream, defaultValue, onMessage }) {
+    const { lastJsonMessage, sendJsonMessage } = useWebSocket(binanceApi, {
+        onMessage
+    });
 
     useEffect(() => {
         sendJsonMessage({

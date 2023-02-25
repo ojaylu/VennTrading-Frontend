@@ -16,6 +16,8 @@ export default function UserOrders({ symbol, pollingInterval = 500, pagination }
     //     };
     // }, [symbol]);
 
+    console.log("orders:", orders)
+
     const columns =[
         {
             title: "Order ID",
