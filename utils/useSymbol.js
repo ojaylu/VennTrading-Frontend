@@ -41,5 +41,5 @@ export default function useSymbol(symbols) {
             }
         };
 
-    return { symbol: symbol?.toLowerCase(), setSymbol, loading };
+    return { symbol: symbol?.toLowerCase(), symbolUpper: symbol?.toUpperCase(), setSymbol, loading };
 }

@@ -22,7 +22,7 @@ const selectOptions = Object.keys(indicatorOptions).map((value) => ({
 }));
 
 export default function Analysis({ symbols }) {
-  const { symbol, setSymbol, loading } = useSymbol(symbols);
+  const { symbolUpper, setSymbol, loading } = useSymbol(symbols);
   const [data, setData] = useState([{}]);
   const [plotResult, setPlotResult] = useState({});
   const [interval, setInterval] = useState("1d");
@@ -78,7 +78,7 @@ export default function Analysis({ symbols }) {
       const response = await fetch("http://localhost:5000/results", {
         method: "POST",
         body: JSON.stringify({
-          symbol: "BTCUSDT",
+          symbol: symbolUpper,
           interval: interval,
           start: startDate.getTime(),
           end: endDate.getTime(),
