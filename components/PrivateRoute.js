@@ -44,15 +44,6 @@ export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHa
             .then(res => res.json())
             .then(data => {
               // symbolsHandler(data.symbols); // testing
-              symbolsHandler([
-                'BNBBUSD', 'BTCBUSD', 'ETHBUSD',
-                'LTCBUSD', 'TRXBUSD', 'XRPBUSD',
-                'BNBUSDT', 'BTCUSDT', 'ETHUSDT',
-                'LTCUSDT', 'TRXUSDT', 'XRPUSDT',
-                'BNBBTC',  'ETHBTC',  'LTCBTC',
-                'TRXBTC',  'XRPBTC',  'LTCBNB',
-                'TRXBNB',  'XRPBNB'
-              ]);
             });
         }
       }
