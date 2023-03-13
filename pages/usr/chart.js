@@ -8,6 +8,9 @@ import { Select, Radio, Button, DatePicker, TimePicker, Input, message } from "a
 import styles from "public/styles/main_layout.module.scss";
 import useSymbol from "utils/useSymbol";
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import CanvasJSReact from './canvasjs.react';
+var CanvasJS = CanvasJSReact.CanvasJS;
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 const indicatorOptions = {
@@ -59,6 +62,7 @@ export default function Analysis({ symbols }) {
   const [endDate, setEndDate] = useState(undefined);
   const [indicators, setIndicators] = useState([]);
   const { currentTheme } = useThemeSwitcher();
+  const [candleStick, setCandleStick] = useState('0');
 
   const symbolHandler = (selectedSymbol) => {
     console.log("chosen symbol:", selectedSymbol);
@@ -98,38 +102,90 @@ export default function Analysis({ symbols }) {
     setInterval(e.target.value);
   };
 
+  const onCandleStickChange = (e) => {
+    console.log(`Candlestick is:${e.target.value}`);
+    setCandleStick(e.target.value);
+  };
+
   const handleSubmit = async () => {
     console.log(indicators);
-
-    try {
-      const response = await fetch("http://localhost:5000/results", {
-        method: "POST",
-        body: JSON.stringify({
-          symbol: "BTCUSDT",
-          interval: interval,
-          start: startDate.getTime(),
-          end: endDate.getTime(),
-          indicators: indicators,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(response.status);
+    if (candleStick){
+      try {
+        const response = await fetch("http://localhost:5000/ohlc", {
+          method: "POST",
+          body: JSON.stringify({
+            
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(response.status);
+        }
+        const results = await response.json();
+        setPlotResult(results);
+        console.log(plotResult);
+        console.log("DATE: ", startDate.getTime());
+      } catch (err) {
+        console.log(err);
       }
+    } else {
+      try {
+        const response = await fetch("http://localhost:5000/results", {
+          method: "POST",
+          body: JSON.stringify({
+            symbol: "BTCUSDT",
+            interval: interval,
+            start: startDate.getTime(),
+            end: endDate.getTime(),
+            indicators: indicators,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(response.status);
+        }
+  
+        const results = await response.json();
+  
+        setPlotResult(results);
+        console.log(plotResult);
+        console.log("DATE: ", startDate.getTime());
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-      const results = await response.json();
-
-      setPlotResult(results);
-      console.log(plotResult);
-      console.log("DATE: ", startDate.getTime());
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    const options = {
+			exportEnabled: true,
+			title: {
+				text: "BTCUSDT"
+			},
+			axisX: {
+				valueFormatString: "D MMM"
+			},
+			axisY: {
+				title: "Price",
+				prefix: "$"
+			},
+			data: [{
+				type: "candlestick",
+				name: "BTCUSDT",
+				showInLegend: true,
+				yValueFormatString: "$##0.00",
+				xValueType: "dateTime",
+				dataPoints: plotResult
+			}]
+		}
+  }
+    
 
   return (
     <LoggedInLayout>
@@ -187,6 +243,12 @@ export default function Analysis({ symbols }) {
               </div>
             </div>
             <div style={{margin: "auto", width: "max-content", marginTop: "5px"}}>
+              <Radio.Group onChange={onCandleStickChange} defaultValue='0'>
+                <Radio.Button value='0'>Off</Radio.Button>
+                <Radio.Button value='1'>On</Radio.Button>
+              </Radio.Group>
+            </div>
+            <div style={{margin: "auto", width: "max-content", marginTop: "5px"}}>
               <Radio.Group onChange={onIntervalChange} defaultValue="1h">
                 <Radio.Button value="1m">1 Minute</Radio.Button>
                 <Radio.Button value="30m">30 Minutes</Radio.Button>
@@ -200,6 +262,7 @@ export default function Analysis({ symbols }) {
                 <Radio.Button value="1Y">1 Year</Radio.Button>*/}
               </Radio.Group>
             </div>
+            
             <Plot
               data={
                 Object.keys(plotResult).length > 0
@@ -215,6 +278,9 @@ export default function Analysis({ symbols }) {
                 }
               }}
             />
+            <CanvasJSChart options = {options}
+				      onRef={ref => this.chart = ref}
+			      />
           </div>
           <div style={{ flexBasis: "30%" }}>
             <>
