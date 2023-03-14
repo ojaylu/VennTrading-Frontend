@@ -28,7 +28,8 @@ const dateHandler = (date, setDate) => {
     if (date) {
       setDate(currentDate => {
         const modifyDate = currentDate;
-        modifyDate.year(chosenDate.year()).month(chosenDate.month()).date(chosenDate.date())
+        modifyDate.year(chosenDate.year()).month(chosenDate.month()).date(chosenDate.date());
+        return modifyDate;
       })
     } else {
       setDate(chosenDate);
@@ -100,17 +101,24 @@ export default function Analysis({ symbols }) {
 
   const handleSubmit = async () => {
     console.log(indicators);
+    const body = {
+      symbol: "BTCUSDT",
+      interval: interval,
+      start: startDate.getTime(),
+      end: endDate.getTime(),
+      indicators: indicators,
+    };
+
+    if (startDate && endDate) {
+      body.startDate = startDate;
+      body.endDate = endDate;
+    }
+
 
     try {
       const response = await fetch("http://localhost:5000/results", {
         method: "POST",
-        body: JSON.stringify({
-          symbol: "BTCUSDT",
-          interval: interval,
-          start: startDate.getTime(),
-          end: endDate.getTime(),
-          indicators: indicators,
-        }),
+        body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
