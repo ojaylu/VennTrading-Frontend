@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 const { Sider, Content } = Layout;
 const { Item } = Breadcrumb;
 
-export default function MainLayout({ children }) {
+export default function MainLayout({ children, style }) {
     const [collapsed, setCollapsed] = useState(false);
     const { currentTheme } = useThemeSwitcher();
     const router = useRouter();
@@ -25,6 +25,7 @@ export default function MainLayout({ children }) {
       {label: "Assets", path: "/usr/assets"},
       {label: "Trade", path: "/usr/trade"},
       {label: "History", path: "/usr/history-overview"},
+      {label: "Chart", path: "/usr/chart"}
     ]
 
     return (
@@ -54,6 +55,7 @@ export default function MainLayout({ children }) {
                     padding: 0,
                     minHeight: "auto",
                     backgroundColor: currentTheme == "light"? "rgb(255, 255, 255)": "rgb(38, 38, 38)",
+                    ...style
                 }}
             >
               { children }

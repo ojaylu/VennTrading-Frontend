@@ -6,7 +6,7 @@ export default function useSymbol(symbols) {
     const router = useRouter();
     const symbol = router.query?.symbol;
     const [loading, setLoading] = useState(true);
-
+    console.log("usesymbol called", symbols);
     useEffect(() => {
         const lastSymbol = localStorage.getItem("last-symbol");
         if (!_.isEmpty(symbols)) {
@@ -41,5 +41,5 @@ export default function useSymbol(symbols) {
             }
         };
 
-    return { symbol, setSymbol, loading };
+    return { symbol: symbol?.toLowerCase(), setSymbol, loading };
 }

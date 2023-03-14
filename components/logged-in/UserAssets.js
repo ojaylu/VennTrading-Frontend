@@ -1,6 +1,4 @@
 import { Table } from "antd";
-import { useQuery } from '@apollo/client';
-import { GET_USER_ASSET } from 'gql/queries';
 
 const columns = [
     {
@@ -24,22 +22,29 @@ const columns = [
         dataIndex: "withdrawing"
     },
     {
+        title: "IPOable",
+        dataIndex: "ipoable"
+    },
+    {
+        title: "Total",
+        dataIndex: "total"
+    },
+    {
         title: "Btc Valuation",
         dataIndex: "btcValuation"
     },
 ];
 
-export default function UserAssets({ className }) {
-    const { loading, error, data, refetch } = useQuery(GET_USER_ASSET, {
-        fetchPolicy: "network-only"
-    });
+export default function UserAssets({ className, loading, data }) {
+
+    console.log("data:", data)
 
     return (
         <Table 
             columns={ columns }
             rowKey="asset"
             loading={ loading }
-            dataSource={ data?.userAssets }
+            dataSource={ data }
             style={{
                 width: "100%"
             }}
