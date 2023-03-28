@@ -125,7 +125,7 @@ export default function Analysis({ symbols }) {
       //range: [plotResult.x[0], plotResult.x[-1]], 
       //rangeslider: {range: [plotResult.x[0], plotResult.x[-1]]}, 
       title: 'Date', 
-      type: 'date'
+      //type: 'date'
     }, 
     yaxis: {
       autorange: true, 
@@ -136,46 +136,75 @@ export default function Analysis({ symbols }) {
 
   const handleSubmit = async () => {
     console.log(indicators);
-    try {
-      const response = await fetch("http://localhost:5000/ohlc", {
-        method: "POST",
-        body: JSON.stringify({
-          symbol: "BTCUSDT",
-          interval: interval,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      const results = await response.json();
-      setPlotResult(results);
-      console.log(plotResult.x);
-
-      const trace1 = [{
-        x: [plotResult.x],
-        open:[plotResult.open],
-        close:[plotResult.close],
-        low:[plotResult.low],
-        high:[plotResult.high],
-        decreasing: {line: {color: '#7F7F7F'}}, 
-        increasing: {line: {color: '#17BECF'}}, 
-        line: {color: 'rgba(31,119,180,1)'}, 
-        type: 'candlestick', 
-        xaxis: 'x', 
-        yaxis: 'y',
-      }];
-
-      setCandleLayout(_candleLayout);
-      setCandleData(trace1);
+    if (candleStick == '1'){
+      try {
+        const response = await fetch("http://localhost:5000/ohlc", {
+          method: "POST",
+          body: JSON.stringify({
+            symbol: "BTCUSDT",
+            interval: interval,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(response.status);
+        }
+        const results = await response.json();
+        setPlotResult(results);
+        console.log(indicators);
+  
+        const trace1 = [{
+          x: plotResult.x,
+          open: plotResult.open,
+          close: plotResult.close,
+          low: plotResult.low,
+          high: plotResult.high,
+          decreasing: {line: {color: '#7F7F7F'}}, 
+          increasing: {line: {color: '#17BECF'}}, 
+          line: {color: 'rgba(31,119,180,1)'}, 
+          type: 'candlestick', 
+          //xaxis: 'x', 
+          //yaxis: 'y',
+        }];
+  
+        setCandleLayout(_candleLayout);
+        setCandleData(trace1);
+        
+      } catch (err) {
+        console.log(err);
+      };
       
-    } catch (err) {
-      console.log(err);
+    } else {
+      try {
+        const response = await fetch("http://localhost:5000/results", {
+          method: "POST",
+          body: JSON.stringify({
+            symbol: "BTCUSDT",
+            interval: interval,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(response.status);
+        }
+        const results = await response.json();
+        setPlotResult(results);
+        console.log(plotResult.x);
+
+      } catch (err) {
+        console.log(err);
+      };
+    }
     
+
     /*
     const body = {
       symbol: "BTCUSDT",
@@ -235,8 +264,7 @@ export default function Analysis({ symbols }) {
       } catch (err) {
         console.log(err);
       }*/
-    };
-
+   
     
 
     const options = {
@@ -341,24 +369,30 @@ export default function Analysis({ symbols }) {
                 <Radio.Button value="1Y">1 Year</Radio.Button>*/}
               </Radio.Group>
             </div>
-            <Plot
-              data={
-                Object.keys(plotResult).length > 0
-                  ? Object.values(plotResult).flat()
-                  : []
-              }
-              style={{ width: "100%" }}
-              layout={currentTheme == "dark" && {
-                plot_bgcolor:"black",
-                paper_bgcolor:"black",
-                font: {
-                  color: "white"
-                }
-              }}
-            />
-            <Plot
+            
+            {candleStick 
+              ?(<Plot
               data={candleData}
-              layout = {candleLayout}/>
+              layout = {candleLayout}/>)
+              
+              :(<Plot
+                data={
+                  Object.keys(plotResult).length > 0
+                    ? Object.values(plotResult).flat()
+                    : []
+                }
+                style={{ width: "100%" }}
+                layout={currentTheme == "dark" && {
+                  plot_bgcolor:"black",
+                  paper_bgcolor:"black",
+                  font: {
+                    color: "white"
+                  }
+                }}
+                />)
+              }
+            
+            
           </div>
 
           <div style={{ flexBasis: "30%" }}>
