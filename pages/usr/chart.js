@@ -4,12 +4,21 @@ import { CloseOutlined } from "@ant-design/icons";
 import LoggedInLayout from "layouts/logged-in/MainLayout";
 import dynamic from "next/dynamic";
 import SymbolSelector from "components/logged-in/SymbolSelector";
-import { Select, Radio, Button, DatePicker, TimePicker, Input, message } from "antd";
+import { Select, Radio, Button, DatePicker, TimePicker, Input, message, Alert } from "antd";
 import styles from "public/styles/main_layout.module.scss";
 import useSymbol from "utils/useSymbol";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
+
+function successMsg() {
+  return(
+    <div>
+      <Alert message="Success Text" type="success" />
+    </div>
+    
+  );
+}
 
 const indicatorOptions = {
   MACD: { a: 0, b: 0 },
@@ -133,6 +142,32 @@ export default function Analysis({ symbols }) {
       type: 'linear'
     }
   };
+
+  const handleSave = async() => {
+    console.log(indicators);
+    try {
+      const response = await fetch("http://localhost:5000/save", {
+        method : "POST",
+        body: JSON.stringify(indicators),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+
+      const results = await response.json();
+      if (results != null){
+        successMsg();
+      }
+
+    } catch (err) {
+      console.log(err);
+    };
+  }
 
   const handleSubmit = async () => {
     console.log(indicators);
@@ -289,9 +324,6 @@ export default function Analysis({ symbols }) {
 			}]
 		}
     
-    
-
-    
   }
 
   return (
@@ -428,6 +460,12 @@ export default function Analysis({ symbols }) {
             <Button type="primary" onClick={handleSubmit}>
               Submit
             </Button>
+
+            <Button type="primary" onClick={handleSave}>
+              Save Strategy
+            </Button>
+
+            
           </div>
         </div>
       </div>
