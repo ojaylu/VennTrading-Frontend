@@ -176,8 +176,9 @@ export default function Analysis({ symbols }) {
         const response = await fetch("http://localhost:5000/ohlc", {
           method: "POST",
           body: JSON.stringify({
-            symbol: "BTCUSDT",
+            symbol: symbolUpper,
             interval: interval,
+            
           }),
           headers: {
             "Content-Type": "application/json",
@@ -218,7 +219,7 @@ export default function Analysis({ symbols }) {
         const response = await fetch("http://localhost:5000/results", {
           method: "POST",
           body: JSON.stringify({
-            symbol: "BTCUSDT",
+            symbol: symbolUpper,
             interval: interval,
           }),
           headers: {
