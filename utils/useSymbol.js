@@ -40,6 +40,6 @@ export default function useSymbol(symbols) {
                 localStorage.setItem("last-symbol", newSymbol);
             }
         };
-
-    return { symbol: symbol?.toLowerCase(), symbolUpper: symbol?.toUpperCase(), setSymbol, loading };
+    // deprecate symbol, migrate to lower and upper Symbol soon
+    return { symbol: symbol?.toLowerCase(), lowerSymbol: symbol?.toLowerCase(), upperSymbol: symbol?.toUpperCase(), setSymbol, loading };
 }

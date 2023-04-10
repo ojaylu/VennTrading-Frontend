@@ -62,7 +62,7 @@ const timeHandler = (date, setDate) => {
 }
 
 export default function Analysis({ symbols }) {
-  const { symbol, setSymbol, loading } = useSymbol(symbols);
+  const { upperSymbol, setSymbol, loading } = useSymbol(symbols);
   const [data, setData] = useState([{}]);
   const [plotResult, setPlotResult] = useState({});
   const [interval, setInterval] = useState("1d");
@@ -176,7 +176,7 @@ export default function Analysis({ symbols }) {
         const response = await fetch("http://localhost:5000/ohlc", {
           method: "POST",
           body: JSON.stringify({
-            symbol: symbolUpper,
+            symbol: upperSymbol,
             interval: interval,
             
           }),
@@ -219,7 +219,7 @@ export default function Analysis({ symbols }) {
         const response = await fetch("http://localhost:5000/results", {
           method: "POST",
           body: JSON.stringify({
-            symbol: symbolUpper,
+            symbol: upperSymbol,
             interval: interval,
           }),
           headers: {
