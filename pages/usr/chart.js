@@ -178,6 +178,7 @@ export default function Analysis({ symbols }) {
           body: JSON.stringify({
             symbol: upperSymbol,
             interval: interval,
+            indicators: indicators,
             
           }),
           headers: {
@@ -221,6 +222,7 @@ export default function Analysis({ symbols }) {
           body: JSON.stringify({
             symbol: upperSymbol,
             interval: interval,
+            indicators: indicators,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -228,12 +230,13 @@ export default function Analysis({ symbols }) {
           },
         });
   
+        
         if (!response.ok) {
           throw new Error(response.status);
         }
         const results = await response.json();
         setPlotResult(results);
-        console.log(plotResult.x);
+        console.log(results);
 
       } catch (err) {
         console.log(err);
