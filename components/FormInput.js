@@ -6,7 +6,8 @@ export function FormInput({ component, required, label }) {
         <Item
             required={required}
             label={label}
-        >{component}
+        >
+            {component}
         </Item>
     );
 }

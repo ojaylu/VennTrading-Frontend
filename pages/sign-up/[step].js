@@ -8,6 +8,7 @@ import isEmpty from "lodash/isEmpty";
 import { Typography, Steps } from "antd";
 import { useAuth } from "components/AuthProvider";
 import Loading from "layouts/Loading";
+import { fields as BinanceFields, schema as BinanceSchema, submitHandler as BinanceHandler } from "components/Settings";
 
 const step1Schema = yup.object({
     email: yup.string().email().required(),
@@ -44,16 +45,24 @@ export default function SignUp() {
             submitHandler: createUser
         },
         {
+            title: "Verify Email", 
+            description: "Verify the inputted email."
+        },
+        {
+            title: "Connect with Binance Account", 
+            description: "Fill in the required information.",
+            type: "form", 
+            fields: BinanceFields, 
+            schema: BinanceSchema,
+            submitHandler: BinanceHandler
+        },
+        {
             title: "Set Up User Profile", 
             description: "Fill in the required information.", 
             type: "form", 
             fields: step2Fields, 
             schema: step2Schema,
             submitHandler: updateUserProfile
-        },
-        {
-            title: "Verify Email", 
-            description: "Verify the inputted email."
         }
     ]
 
@@ -93,7 +102,7 @@ export default function SignUp() {
                         userSelect: "none"
                     }}
                 >
-                    Check your mainbox<br />
+                    Check your mailbox<br />
                     and<br />
                     Verify your email
                 </Typography.Paragraph>

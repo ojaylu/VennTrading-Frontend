@@ -1,8 +1,9 @@
 import { Dropdown, Button } from "antd";
 import { useAuth } from "./AuthProvider";
-import { UserOutlined, LoginOutlined, LogoutOutlined } from "@ant-design/icons";
+import { UserOutlined, LoginOutlined, LogoutOutlined, SettingOutlined } from "@ant-design/icons";
 import ThemeSwitcher from "components/ThemeSwitcher";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function DropdownItem({ children, onClick }) {
     return (
@@ -14,32 +15,43 @@ function DropdownItem({ children, onClick }) {
 
 export default function UserOptions() {
     const { isAuthenticated, logout } = useAuth();
+    const router = useRouter();
+
+    const loginComponent = {key: "login", label: 
+        <Link href="/login">
+            <DropdownItem type="text">
+                <LoginOutlined style={{marginRight: "5px"}}/>
+                Login
+            </DropdownItem>
+        </Link>
+    }
+        
+    const logoutComponent = {key: "logout", label: 
+        <DropdownItem onClick={logout}>
+            <LogoutOutlined style={{marginRight: "5px"}}/>
+            Logout
+        </DropdownItem>
+    }
     const authenticatedItems = [
         {key: "1", label: 
-            <DropdownItem onClick={logout}>
-                <LogoutOutlined style={{marginRight: "5px"}}/>
-                Logout
+            <DropdownItem onClick={() => router.push("/usr/settings")}>
+                <SettingOutlined style={{marginRight: "5px"}}/>
+                Settings
             </DropdownItem>
         }
     ]
     const unauthenticatedItems = [
-        {key: "1", label: 
-            <Link href="/login">
-                <DropdownItem type="text">
-                    <LoginOutlined style={{marginRight: "5px"}}/>
-                    Login
-                </DropdownItem>
-            </Link>
-        }
     ]
+
+    console.log(JSON.stringify(isAuthenticated));
 
     return (
         <>
             <Dropdown
                 menu={{
-                    items: isAuthenticated ? authenticatedItems : unauthenticatedItems
+                    items: isAuthenticated.user? [logoutComponent, ...(isAuthenticated.creds? authenticatedItems: [])]: [loginComponent]
                 }}
-                placement="bottomLeft"
+                placement="bottom"
                 arrow
             >
                 <Button

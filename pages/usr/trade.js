@@ -16,16 +16,18 @@ import { TechnicalAnalysis } from "react-ts-tradingview-widgets";
 import Filters from "components/logged-in/Filters";
 import useSymbol from "utils/useSymbol";
 import Ticker from "components/logged-in/Ticker";
+import { useAuth } from "components/AuthProvider";
 
 
 export default function Trade({ symbols }) {
+    const { loggedInRequest } = useAuth();
     const { currentTheme } = useThemeSwitcher();
     const { symbol, setSymbol, loading } = useSymbol(symbols);
     const [permissions, setPermissions] = useState([]);
     const [filters, setFilters] = useState({});
 
     const fetchSymbolInfo = (symbol) => {
-        fetch(`http://localhost:4000/symbols/${symbol}`)
+        loggedInRequest(`http://localhost:4000/symbols/${symbol}`)
             .then(res => res.json())
             .then(({orderTypes, filters}) => {
                 setPermissions(orderTypes);

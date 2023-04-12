@@ -2,10 +2,11 @@ import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from 'components/AuthProvider';
 import Loading from 'layouts/Loading';
+import { message } from "antd";
 
 export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHandler }) {
   const router = useRouter();
-  const { isAuthenticated, isLoading, user, sendVerification } = useAuth();
+  const { isAuthenticated, isLoading, user, sendVerification, loggedInRequest, hasCreds } = useAuth();
   // const pathIsProtected = protectedRoutes.has(router.pathname);
   const protectedRE = /^\/usr/;
   const pathIsProtected = protectedRE.test(router.pathname);
@@ -20,7 +21,7 @@ export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHa
     */
     if (!isLoading) {
       firstRender.current = false;
-      if (!isAuthenticated && pathIsProtected) {
+      if (!isAuthenticated.user && pathIsProtected) {
         router.push('/login');
       }
     }
@@ -30,17 +31,19 @@ export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHa
     // after checking session storage (!isLoading)
     if (!firstRender.current) {
       // when user logs out
-      if (!isAuthenticated) {
+      if (!isAuthenticated.user) {
         router.push("/");
       } else {
-        if (!user.displayName) {
+        if(!user.emailVerified) {
           router.push("/sign-up/2");
-        } else if (!user.emailVerified) {
-          sendVerification();
+        } else if(!isAuthenticated.creds) {
           router.push("/sign-up/3");
+        } else if(!user.displayName) {
+          sendVerification();
+          router.push("/sign-up/4");
         } else {
           router.push("/usr/main");
-          fetch("http://localhost:4000/symbols")
+          loggedInRequest("http://localhost:4000/symbols")
             .then(res => res.json())
             .then(data => {
               // symbolsHandler(data.symbols); // testing
@@ -54,7 +57,7 @@ export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHa
     isLoading && pathIsProtected on first render
     !isAuthenticated && pathIsProtected on subsequent renders
   */
-  if ((isLoading || !isAuthenticated) && pathIsProtected) {
+  if ((isLoading || !isAuthenticated.user) && pathIsProtected) {
     return <Loading />;
   }
 

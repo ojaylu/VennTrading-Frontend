@@ -15,15 +15,16 @@ const AuthContext = createContext();
 
 function AuthProvider({ children }) {
     const [user, setUser] = useState(auth.currentUser);
-    const [isAuthenticated, setAuthenticated] = useState(true);
+    const [isAuthenticated, setAuthenticated] = useState({user: false, creds: false});
     const [isLoading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         // check session storage on first render
-        if (user) {
-            setAuthenticated(true);
+        if(user) {
+            setAuthenticated(isAuthenticated => ({ ...isAuthenticated, user: true }));
         }
+        
         setLoading(false);
     }, []);
 
@@ -39,33 +40,37 @@ function AuthProvider({ children }) {
         message.error(msg)
     }
 
-    function getCredCookie() {
-        fetch("http://localhost:4000/logged-in", { credentials: "include" })
-            .then(
-                res => res.json()
-            )
-            .then(
-                data => console.log(data)
-            );
-    }
+    // function getCredCookie() {
+    //     fetch("http://localhost:4000/logged-in", { credentials: "include" })
+    //         .then(
+    //             res => res.json()
+    //         )
+    //         .then(
+    //             data => console.log(data)
+    //         );
+    // }
 
-    function clearCredCookie() {
-        fetch("http://localhost:4000/logged-out", { credentials: "include" })
-            .then(
-                res => res.json()
-            )
-            .then(
-                data => console.log(data)
-            );
+    // function clearCredCookie() {
+    //     fetch("http://localhost:4000/logged-out", { credentials: "include" })
+    //         .then(
+    //             res => res.json()
+    //         )
+    //         .then(
+    //             data => console.log(data)
+    //         );
+    // }
+
+    function credsExist() {
+        return loggedInRequest("http://localhost:4000/binance-keys")
+            .then(res => res.ok? true: false);
     }
 
     function loginWithEmail(email, password) {
         signInWithEmailAndPassword(auth, email, password)
-            .then(userCredential => {
+            .then(async(userCredential) => {
                 setUser(userCredential.user);
                 success("Logged in");
-                getCredCookie();
-                setAuthenticated(true);
+                await credsExist()? setAuthenticated({user: true, creds: true}): setAuthenticated({user: true, creds: false});
             }).catch(err => {
                 error(err.message);
             });
@@ -73,11 +78,10 @@ function AuthProvider({ children }) {
 
     function loginWithThirdParty(providerName) {
         loginWithPopup(providerName)
-            .then(({ user, token }) => {
+            .then(async ({ user, token }) => {
                 setUser(user);
                 success("Logged in");
-                getCredCookie();
-                setAuthenticated(true);
+                await credsExist()? setAuthenticated({user: true, creds: true}): setAuthenticated({user: true, creds: false});
             }).catch(err => {
                 error(err.message);
             });
@@ -110,7 +114,7 @@ function AuthProvider({ children }) {
             .then(() => {
                 success("Logged out");
                 setAuthenticated(false);
-                clearCredCookie();
+                // clearCredCookie();
                 resetUser();
             }).catch(err => {
                 error(err.message);
@@ -124,6 +128,22 @@ function AuthProvider({ children }) {
             });
     }
 
+    function saveKeySecret() {
+        loggedInRequest("http://localhost:4000/binance-keys")
+    }
+
+    async function loggedInRequest(url, data={}) {
+        try {
+            const token = await auth.currentUser.getIdToken(true);
+            console.log("blehblehbleh")
+            const { headers, ...rest } = data;
+            return fetch(url, {...rest, headers: {...headers, "X-Token": token}});
+        } catch(e) {
+            error("Error with request");
+            throw Error(e);
+        }
+    }
+
     return (
         <AuthContext.Provider
             value={{
@@ -135,7 +155,8 @@ function AuthProvider({ children }) {
                 createUser,
                 updateUserProfile,
                 sendVerification,
-                isLoading
+                isLoading,
+                loggedInRequest
             }}
         >
             {children}

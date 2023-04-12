@@ -5,9 +5,7 @@ import {
   PageHeader
 } from "antd";
 import { useState } from "react";
-import UserOptions from "components/UserOptions.js";
 import LayoutHeader from "components/LayoutHeader";
-import SideBar from "components/logged-in/SideBar";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import styles from "public/styles/main_layout.module.scss";
 import Header from "components/MainHeader";

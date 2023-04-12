@@ -173,7 +173,7 @@ export default function Analysis({ symbols }) {
     console.log(indicators);
     if (candleStick == '1'){
       try {
-        const response = await fetch("http://localhost:5000/ohlc", {
+        const response = fetch("http://localhost:5000/ohlc", {
           method: "POST",
           body: JSON.stringify({
             symbol: upperSymbol,
@@ -184,14 +184,9 @@ export default function Analysis({ symbols }) {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-        });
-  
-        if (!response.ok) {
-          throw new Error(response.status);
-        }
-        const results = await response.json();
-        setPlotResult(results);
-        console.log(indicators);
+        }).then(res => res.json()).then(
+          results => setPlotResult(results)
+        );
   
         const trace1 = [{
           x: plotResult.x,
@@ -403,12 +398,12 @@ export default function Analysis({ symbols }) {
               </Radio.Group>
             </div>
             
-            {candleStick 
-              ?(<Plot
-              data={candleData}
-              layout = {candleLayout}/>)
-              
-              :(<Plot
+            {candleStick?
+              <Plot
+                data={candleData}
+                layout = {candleLayout}
+              />:
+              <Plot
                 data={
                   Object.keys(plotResult).length > 0
                     ? Object.values(plotResult).flat()
@@ -422,8 +417,8 @@ export default function Analysis({ symbols }) {
                     color: "white"
                   }
                 }}
-                />)
-              }
+              />
+            }
             
             
           </div>
