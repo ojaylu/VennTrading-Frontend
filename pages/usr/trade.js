@@ -22,7 +22,7 @@ import { useAuth } from "components/AuthProvider";
 export default function Trade({ symbols }) {
     const { loggedInRequest } = useAuth();
     const { currentTheme } = useThemeSwitcher();
-    const { symbol, setSymbol, loading } = useSymbol(symbols);
+    const { upperSymbol, lowerSymbol, setSymbol, loading } = useSymbol(symbols);
     const [permissions, setPermissions] = useState([]);
     const [filters, setFilters] = useState({});
 
@@ -41,26 +41,29 @@ export default function Trade({ symbols }) {
     };
 
     useEffect(() => {
-        symbol && fetchSymbolInfo(symbol);
-    }, [symbol]);
+        upperSymbol && fetchSymbolInfo(upperSymbol);
+    }, [upperSymbol]);
+
+    console.log("hi");
+    console.log("upper symbol: " + upperSymbol);
 
     return (
         loading ||
         <LoggedInLayout>
             <Panel style={{ height: "auto" }}>
                 <Container ratio={8} style={{ borderRight: "none" }}>
-                    <SymbolInfo symbol={ symbol } />
+                    <SymbolInfo symbol={ upperSymbol } />
                 </Container>
                 <Container ratio={2} style={{ margin: "auto" }}>
                     <SymbolSelector handler={ setSymbol } symbols={ symbols } />
                 </Container>
             </Panel>
             <Panel style={{ height: "auto", padding: "0px 20px" }}>
-                <Ticker symbol={symbol} />
+                <Ticker symbol={upperSymbol} />
             </Panel>
             <Panel>
                 <Container ratio={2}>
-                    <OrderBook symbol={ symbol } />
+                    <OrderBook symbol={ lowerSymbol } />
                 </Container>
                 <Container ratio={6}>
                     <AdvancedRealTimeChart
@@ -70,15 +73,15 @@ export default function Trade({ symbols }) {
                     />
                 </Container>
                 <Container ratio={2}>
-                    <RecentTrades symbol={ symbol } />
+                    <RecentTrades symbol={ lowerSymbol } />
                 </Container>
             </Panel>
             <Panel style={{height: "450px"}}>
                 <Container ratio={3}>
-                    <TechnicalAnalysis colorTheme={currentTheme} width="100%" symbol={`BINANCE:${symbol}`} />
+                    <TechnicalAnalysis colorTheme={currentTheme} width="100%" symbol={`BINANCE:${upperSymbol}`} />
                 </Container>
                 <Container ratio={3}>
-                    <MakeOrder symbol={ symbol } permissions={ permissions } />
+                    <MakeOrder symbol={ upperSymbol } permissions={ permissions } />
                 </Container>
                 <Container ratio={3}>
                     <Filters filters={ filters } />
@@ -93,12 +96,12 @@ export default function Trade({ symbols }) {
                             {
                                 label: "Orders",
                                 key: "viewOrders",
-                                children: <AllOrders symbol={ symbol } />
+                                children: <AllOrders symbol={ upperSymbol } />
                             },
                             {
                                 label: "Trades",
                                 key: "viewTrades",
-                                children: <UserTrades symbol={ symbol } />
+                                children: <UserTrades symbol={ upperSymbol } />
                             }
                         ]}
                     />

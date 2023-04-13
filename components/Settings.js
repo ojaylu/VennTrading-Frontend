@@ -18,23 +18,25 @@ export const fields = [
     {name: "secret", label: "Secret", required: true, type: "Password"}
 ]
 
-export const sumbitHandler = creds => {
-    const encryptedCreds = aes.encrypt(JSON.stringify(creds), process.env.NEXT_PUBLIC_API_SECRET).toString();
-    // loggedInRequest("http://localhost:4000/hi", {
-    //     body: JSON.stringify({ "hi": "bye" }),
-    //     method: "POST",
-    //     "mode": "cors",
-    //     "credentials": "include",
+export const submitHandler = fetchCall => (
+    creds => {
+        const encryptedCreds = aes.encrypt(JSON.stringify(creds), process.env.NEXT_PUBLIC_API_SECRET).toString();
+        // loggedInRequest("http://localhost:4000/hi", {
+        //     body: JSON.stringify({ "hi": "bye" }),
+        //     method: "POST",
+        //     "mode": "cors",
+        //     "credentials": "include",
 
-    // });
-    loggedInRequest("http://localhost:4000/binance-keys", {
-        body: JSON.stringify({ encryptedCreds }),
-        method: "POST",
-        headers: {
-            "Content-Type":  "application/json"
-        }
-    });
-}
+        // });
+        fetchCall("http://localhost:4000/binance-keys", {
+            body: JSON.stringify({ encryptedCreds }),
+            method: "POST",
+            headers: {
+                "Content-Type":  "application/json"
+            }
+        });
+    }
+)
 
 export default function Settings() {
     const { loggedInRequest } = useAuth();
@@ -45,7 +47,7 @@ export default function Settings() {
             <Title level={4}>
                 The key and secret used to connect to Binance:
             </Title>
-            <Form schema={schema} submitHandler={sumbitHandler}>
+            <Form schema={schema} submitHandler={sumbitHandler(loggedInRequest)}>
                 {
                     fields.map((field, index) => 
                         <FormTextInput {...field} key={index} />

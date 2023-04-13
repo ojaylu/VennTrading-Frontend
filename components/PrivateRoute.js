@@ -46,7 +46,8 @@ export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHa
           loggedInRequest("http://localhost:4000/symbols")
             .then(res => res.json())
             .then(data => {
-              // symbolsHandler(data.symbols); // testing
+              console.log("symbols ss s: " + JSON.stringify(data));
+              symbolsHandler(data);
             });
         }
       }

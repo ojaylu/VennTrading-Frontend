@@ -2,18 +2,10 @@ import React, { useState } from "react";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher"
 import { AuthProvider } from "components/AuthProvider";
 import PrivateRoute from "components/PrivateRoute";
-import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink, from } from '@apollo/client';
+import { setContext } from "@apollo/client/link/context";
+import { auth } from "firebase-config";
 import "public/styles/styles.scss";
-
-const link = createHttpLink({
-  uri: "http://localhost:4000/graphql",
-  credentials: "include"
-});
-
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache(),
-});
 
 const themes = {
   dark: "/styles/dark-theme.css",
@@ -22,15 +14,30 @@ const themes = {
 
 function MyApp({ Component, pageProps }) {
   // const protectedRoutes = new Set(["/main"]);
-  const [symbols, setSymbols] = useState([
-    'BNBBUSD', 'BTCBUSD', 'ETHBUSD',
-    'LTCBUSD', 'TRXBUSD', 'XRPBUSD',
-    'BNBUSDT', 'BTCUSDT', 'ETHUSDT',
-    'LTCUSDT', 'TRXUSDT', 'XRPUSDT',
-    'BNBBTC',  'ETHBTC',  'LTCBTC',
-    'TRXBTC',  'XRPBTC',  'LTCBNB',
-    'TRXBNB',  'XRPBNB'
-  ]);
+  const [symbols, setSymbols] = useState([]);
+
+  const tokenMiddleware = setContext(async(_, context = {}) => {
+    const {headers, ...rest} = context;
+    const token = await auth.currentUser.getIdToken(true);
+    return ({
+      ...rest,
+      headers: {
+        ...headers,
+        "X-Token": token
+      }
+    })
+  })
+
+  const httpLink = createHttpLink({
+  uri: "http://localhost:4000/graphql",
+  credentials: "include"
+});
+
+  const client = new ApolloClient({
+    link: from([ tokenMiddleware, httpLink ]),
+    cache: new InMemoryCache(),
+  });
+
 
   return (
     <ApolloProvider client={client}>

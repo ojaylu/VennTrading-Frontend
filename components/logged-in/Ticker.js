@@ -20,8 +20,7 @@ const options = ["1m", "1h", "1d"].map(option => ({label: option, value: option}
 export default function Ticker({ symbol }) {
     const [interval, setInterval] = useState("1d");
     const { error, data, startPolling, stopPolling } = useQuery(GET_WINDOW_STATS, {
-        variables: {symbol, interval},
-        fetchPolicy: 'network-only'
+        variables: {symbol, interval}
     });
 
     console.log("data", data, symbol);

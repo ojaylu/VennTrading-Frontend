@@ -128,7 +128,7 @@ export default function MakeOrder({ symbol, permissions }) {
             defaultActiveKey={ orderTypes[0]?.key }
             centered
             items={ orderTypes }
-            style={{overflow: "scroll"}}
+            style={{ overflow: "scroll" }}
         />
     );
 };

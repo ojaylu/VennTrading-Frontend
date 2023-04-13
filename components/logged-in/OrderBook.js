@@ -1,5 +1,3 @@
-import { useQuery } from '@apollo/client';
-import { GET_ORDER_BOOK } from 'gql/queries';
 import DynamicTable from 'components/DynamicTable';
 import _ from "lodash";
 import { useBinData } from 'utils/binanceHooks';

@@ -1,5 +1,3 @@
-import { useQuery } from '@apollo/client';
-import { GET_TRADE_RECORD } from 'gql/queries';
 import { useEffect, useState } from 'react';
 import DynamicTable from 'components/DynamicTable';
 import { useBinData } from 'utils/binanceHooks';

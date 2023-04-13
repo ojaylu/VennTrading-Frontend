@@ -135,7 +135,6 @@ function AuthProvider({ children }) {
     async function loggedInRequest(url, data={}) {
         try {
             const token = await auth.currentUser.getIdToken(true);
-            console.log("blehblehbleh")
             const { headers, ...rest } = data;
             return fetch(url, {...rest, headers: {...headers, "X-Token": token}});
         } catch(e) {

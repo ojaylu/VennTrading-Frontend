@@ -41,5 +41,5 @@ export default function useSymbol(symbols) {
             }
         };
     // deprecate symbol, migrate to lower and upper Symbol soon
-    return { symbol: symbol?.toLowerCase(), lowerSymbol: symbol?.toLowerCase(), upperSymbol: symbol?.toUpperCase(), setSymbol, loading };
+    return { symbol: symbol, lowerSymbol: symbol?.toLowerCase(), upperSymbol: symbol?.toUpperCase(), setSymbol, loading };
 }
