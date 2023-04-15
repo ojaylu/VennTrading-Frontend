@@ -49,7 +49,7 @@ export default function UserOptions() {
         <>
             <Dropdown
                 menu={{
-                    items: isAuthenticated.user? [logoutComponent, ...(isAuthenticated.creds? authenticatedItems: [])]: [loginComponent]
+                    items: isAuthenticated.user? [...(isAuthenticated.creds? authenticatedItems: []), logoutComponent]: [loginComponent]
                 }}
                 placement="bottom"
                 arrow

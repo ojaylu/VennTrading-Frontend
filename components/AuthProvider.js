@@ -10,6 +10,7 @@ import { auth } from "firebase-config";
 import { message } from "antd";
 import loginWithPopup from "utils/firebase/loginWithPopup";
 import { useRouter } from "next/router";
+import aes from "crypto-js/aes";
 
 const AuthContext = createContext();
 
@@ -92,6 +93,7 @@ function AuthProvider({ children }) {
             .then(({ user }) => {
                 setUser(user);
                 success("Created User");
+                sendVerification();
                 router.push("/sign-up/2");
             }).catch(err => {
                 error(err.message);
@@ -102,8 +104,7 @@ function AuthProvider({ children }) {
         updateProfile(auth.currentUser, fields)
             .then(() => {
                 success("Profile Updated");
-                sendVerification();
-                router.push("/sign-up/3");
+                setAuthenticated({user: true, creds: true});
             }).catch(err => {
                 error(err.message);
             });
@@ -128,8 +129,36 @@ function AuthProvider({ children }) {
             });
     }
 
-    function saveKeySecret() {
-        loggedInRequest("http://localhost:4000/binance-keys")
+    function saveKeySecret(creds) {
+        const encryptedCreds = aes.encrypt(JSON.stringify(creds), process.env.NEXT_PUBLIC_API_SECRET).toString();
+        // loggedInRequest("http://localhost:4000/hi", {
+        //     body: JSON.stringify({ "hi": "bye" }),
+        //     method: "POST",
+        //     "mode": "cors",
+        //     "credentials": "include",
+
+        // });
+        return loggedInPost("http://localhost:4000/binance-keys", { encryptedCreds });
+    }
+
+    function loggedInPost(url, body) {
+        return loggedInRequest(url, {
+            body: JSON.stringify(body),
+            method: "POST",
+            headers: {
+                "Content-Type":  "application/json"
+            }
+        })
+    }
+
+    function loggedInDelete(url, body) {
+        return loggedInRequest(url, {
+            body: JSON.stringify(body),
+            method: "DELETE",
+            headers: {
+                "Content-Type":  "application/json"
+            }
+        })
     }
 
     async function loggedInRequest(url, data={}) {
@@ -141,6 +170,18 @@ function AuthProvider({ children }) {
             error("Error with request");
             throw Error(e);
         }
+    }
+
+    function startBot(strategyId, strategyPayload) {
+        return loggedInPost(`http://localhost:4000/trading-bot/${strategyId}`, strategyPayload)
+            .then(data => data.json());
+    }
+
+    function stopBot(strategyId, strategyPayload) {
+        return loggedInDelete(`http://localhost:4000/trading-bot/${strategyId}`, {
+            symbol: strategyPayload.symbol,
+            interval: strategyPayload.interval
+        }).then(data => data.json());
     }
 
     return (
@@ -155,7 +196,11 @@ function AuthProvider({ children }) {
                 updateUserProfile,
                 sendVerification,
                 isLoading,
-                loggedInRequest
+                loggedInRequest,
+                saveKeySecret,
+                loggedInPost,
+                startBot,
+                stopBot
             }}
         >
             {children}

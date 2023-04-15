@@ -31,13 +31,9 @@ const step2Fields = [
 export default function SignUp() {
     const router = useRouter();
     const { step } = router.query;
-    const { createUser, updateUserProfile, loggedInRequest } = useAuth();
+    const { createUser, updateUserProfile, saveKeySecret } = useAuth();
     // if step is not int, parseInt returns NaN which does not eval the second statement
     const currentStep = parseInt(step) && parseInt(step) - 1;
-
-    const a = b => (
-        c => b(c)
-    )
 
     const steps = [
         {
@@ -58,7 +54,11 @@ export default function SignUp() {
             type: "form", 
             fields: BinanceFields, 
             schema: BinanceSchema,
-            submitHandler: BinanceHandler(loggedInRequest)
+            submitHandler: () => {
+                saveKeySecret().then(() => {
+                    router.push("/sign-up/4");
+                })
+            }
         },
         {
             title: "Set Up User Profile", 

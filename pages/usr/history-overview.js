@@ -8,7 +8,7 @@ import useSymbol from "utils/useSymbol";
 import styles from "public/styles/main_layout.module.scss";
 
 export default function HistoryOverview({ symbols }) {
-    // const { symbol, setSymbol, laoding } = useSymbol(symbols);
+    const { symbol, setSymbol, loading } = useSymbol(symbols);
 
     return (
         <LoggedInLayout>

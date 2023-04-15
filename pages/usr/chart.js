@@ -72,7 +72,7 @@ export default function Analysis({ symbols }) {
   const [indicators, setIndicators] = useState([]);
   const { currentTheme } = useThemeSwitcher();
   const [candleStick, setCandleStick] = useState([]);
-  const [candleLayout, setCandleLayout] = useState([]);
+  const [candleLayout, setCandleLayout] = useState({});
   const [candleData, setCandleData] = useState([]);
 
   const symbolHandler = (selectedSymbol) => {
@@ -405,7 +405,14 @@ export default function Analysis({ symbols }) {
             {candleStick?
               <Plot
                 data={candleData}
-                layout = {candleLayout}
+                layout = {{...candleLayout, ...(currentTheme == "dark" && {
+                  plot_bgcolor:"black",
+                  paper_bgcolor:"black",
+                  font: {
+                    color: "white"
+                  }})
+                }}
+                style={{ width: "100%" }}
               />:
               <Plot
                 data={

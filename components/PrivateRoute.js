@@ -6,7 +6,7 @@ import { message } from "antd";
 
 export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHandler }) {
   const router = useRouter();
-  const { isAuthenticated, isLoading, user, sendVerification, loggedInRequest, hasCreds } = useAuth();
+  const { isAuthenticated, isLoading, user, sendVerification, loggedInRequest } = useAuth();
   // const pathIsProtected = protectedRoutes.has(router.pathname);
   const protectedRE = /^\/usr/;
   const pathIsProtected = protectedRE.test(router.pathname);
@@ -35,11 +35,11 @@ export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHa
         router.push("/");
       } else {
         if(!user.emailVerified) {
+          sendVerification();
           router.push("/sign-up/2");
         } else if(!isAuthenticated.creds) {
           router.push("/sign-up/3");
         } else if(!user.displayName) {
-          sendVerification();
           router.push("/sign-up/4");
         } else {
           router.push("/usr/main");

@@ -23,7 +23,8 @@ export default function MainLayout({ children, style }) {
       {label: "Assets", path: "/usr/assets"},
       {label: "Trade", path: "/usr/trade"},
       {label: "History", path: "/usr/history-overview"},
-      {label: "Chart", path: "/usr/chart"}
+      {label: "Chart", path: "/usr/chart"},
+      {label: "Strategies", path: "/usr/strategies"}
     ]
 
     return (

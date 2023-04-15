@@ -7,7 +7,7 @@ export default function Loading() {
   return (
       <div
           style={{
-              height: "100%",
+              minHeight: "100vh",
               display: "flex",
               justifyContent: "center",
               alignItems: "center"
@@ -19,10 +19,13 @@ export default function Loading() {
           height="100"
           priority
           style={{
-            marginRight: "10px"
+            marginRight: "20px"
           }}
+          alt=""
         />
-        Loading
+        <div>
+          loading...
+        </div>
       </div>
   )
 }
