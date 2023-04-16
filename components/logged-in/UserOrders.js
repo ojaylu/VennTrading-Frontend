@@ -3,18 +3,18 @@ import { GET_ALL_ORDERS } from 'gql/queries';
 import { useEffect } from 'react';
 import { Table } from 'antd';
 
-export default function UserOrders({ symbol, pollingInterval = 500, pagination }) {
+export default function UserOrders({ symbol, pollingInterval = 5000, pagination }) {
     const { error, data: orders, startPolling, stopPolling, loading } = useQuery(GET_ALL_ORDERS, {
-        variables: {symbol},
+        variables: { symbol },
         fetchPolicy: "network-only"
     });
 
-    // useEffect(() => {
-    //     startPolling(pollingInterval);
-    //     return () => {
-    //         stopPolling();
-    //     };
-    // }, [symbol]);
+    useEffect(() => {
+        startPolling(pollingInterval);
+        return () => {
+            stopPolling();
+        };
+    }, [symbol]);
 
     console.log("orders:", orders)
 

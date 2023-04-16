@@ -40,7 +40,7 @@ function BacktestPopup({ defaultValue, confirmHandler, disabled }) {
 export default function Strategy() {
     const [strategy, setStrategy] = useState({});
     const { loggedInPost, startBot, stopBot } = useAuth();
-    const [backtestingData, setBacktestingData] = useState({ loss: -64183.08, net: -8378.85, profit: 55804.23, return: -24.889834154057433 });
+    const [backtestingData, setBacktestingData] = useState({});
     const router = useRouter();
     const [quantity, setQuantity] = useState(1);
     const { id } = router.query;
@@ -84,7 +84,8 @@ export default function Strategy() {
     return (
         <LoggedInLayout style={{ display: "flex", flexDirection: "column" }}>
             <PageHeader 
-                title={`STRATEGY ID: ${ id }`}
+                title={`Strategy ID: ${ id }`}
+                subTitle={`Symbol: ${ strategy.symbol } - Interval: ${ strategy.interval }`}
                 extra={<>
                     <StartStopBotButton 
                         running={ strategy.running }

@@ -59,18 +59,16 @@ export default function AssetsOverview({ symbols }) {
             accum[name] = rest;
             return accum;
         }, {}))
-    }, [assets]);
-    console.log("asset details:", assetDetails)
-    console.log("hahaha:", assetDetails[selectedAsset] && Object.keys(assetDetails[selectedAsset]))
-    console.log("buahahaha:", assetDetails[selectedAsset] && Object.values(assetDetails[selectedAsset]).map(value => Number(value)))
+    }, [data]);
+
     return (
         <LoggedInLayout>
-            <PageHeader 
+            {/* <PageHeader 
                 title="Overview on Asset" 
                 extra={<SelectAsset assetList={assetList} handler={assetHandler} />} 
                 className={styles.panel}
-            />
-            <div 
+            /> */}
+            {/* <div 
                 style={{display: "flex", height: "500px"}} 
                 className={styles.panel}
             >
@@ -131,7 +129,7 @@ export default function AssetsOverview({ symbols }) {
                         // redraw
                     />
                 </div>
-            </div>
+            </div> */}
             <PageHeader title="Overall Assets" className={styles.panel} />
             <UserAssets className={styles.panel} data={assets} loading={loading} />
         </LoggedInLayout>

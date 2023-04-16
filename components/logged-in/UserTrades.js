@@ -1,12 +1,20 @@
 import { GET_USER_TRADES } from "gql/queries";
 import { useQuery } from "@apollo/client";
 import { Table } from "antd";
+import { useEffect } from "react";
 
-export default function UserTrades({ symbol }) {
-    const { data, loading } = useQuery(GET_USER_TRADES, {
+export default function UserTrades({ symbol, pollingInterval=5000 }) {
+    const { data, loading, startPolling, stopPolling } = useQuery(GET_USER_TRADES, {
         variables: {symbol},
         fetchPolicy: "network-only"
     });
+
+    useEffect(() => {
+        startPolling(5000);
+        return () => {
+            stopPolling();
+        };  
+    }, [symbol]);
 
     const columns = [
         {
