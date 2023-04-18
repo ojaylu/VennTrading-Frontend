@@ -4,35 +4,15 @@ import { CloseOutlined } from "@ant-design/icons";
 import LoggedInLayout from "layouts/logged-in/MainLayout";
 import dynamic from "next/dynamic";
 import SymbolSelector from "components/logged-in/SymbolSelector";
-import { Select, Radio, Button, DatePicker, TimePicker, Input, message, Alert } from "antd";
+import { Select, Radio, Button, DatePicker, TimePicker, Input, message, Alert, Modal } from "antd";
 import styles from "public/styles/main_layout.module.scss";
 import useSymbol from "utils/useSymbol";
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import StrategyChooser from "components/logged-in/StrategyChooser";
+import { indicatorOptions } from "utils/indicators";
+import { setStrategy } from "utils/firebase/firestore";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
-
-function successMsg() {
-  return(
-    <div>
-      <Alert message="Success Text" type="success" />
-    </div>
-    
-  );
-}
-
-const indicatorOptions = {
-  MACD: { short: 12, long: 26, ema: 9 },
-  RSI: { lower: 20, upper: 80 },
-  BB: { period: 20, std: 2 },
-  PSAR: { init_af: 0.02, af_step: 0.02, max_af: 0.2 },
-  OBV: { period: 20 },
-  EMA: { period: 10 }
-};
-
-const selectOptions = Object.keys(indicatorOptions).map((value) => ({
-  label: value,
-  value: value,
-}));
 
 const dateHandler = (date, setDate) => {
   return chosenDate => {
@@ -69,43 +49,19 @@ export default function Analysis({ symbols }) {
   const [interval, setInterval] = useState("1d");
   const [startDate, setStartDate] = useState(undefined);
   const [endDate, setEndDate] = useState(undefined);
-  const [indicators, setIndicators] = useState([]);
   const { currentTheme } = useThemeSwitcher();
   const [candleStick, setCandleStick] = useState([]);
   const [candleLayout, setCandleLayout] = useState({});
   const [candleData, setCandleData] = useState([]);
+  const [indicators, setIndicators] = useState([]);
+  const [chosenIndicators, setChosenIndicators] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [strategyName, setStrategyName] = useState("");
+
 
   const symbolHandler = (selectedSymbol) => {
     console.log("chosen symbol:", selectedSymbol);
     setSymbol(selectedSymbol);
-  };
-
-  const handleAddIndicator = (selectedIndicator) => {
-    setIndicators((currentList) => {
-      const values = [...currentList];
-      values.push({
-        indicator: selectedIndicator,
-        ...indicatorOptions[selectedIndicator],
-      });
-      return values;
-    });
-  };
-
-  const handleRemovePlayers = (index) => {
-    setIndicators((currentList) => {
-      const values = [...currentList];
-      values.splice(index, 1);
-      return values;
-    });
-  };
-
-  const handleInputChange = (index, e) => {
-    setIndicators((currentList) => {
-      const values = [...currentList];
-      const updatedField = e.target.name;
-      values[index][updatedField] = e.target.value;
-      return values;
-    });
   };
 
   const onIntervalChange = (e) => {
@@ -118,56 +74,40 @@ export default function Analysis({ symbols }) {
     setCandleStick(e.target.value);
   };
 
-  
-
-  const _candleLayout = {
-    dragmode: 'zoom', 
-    margin: {
-      r: 10, 
-      t: 25, 
-      b: 40, 
-      l: 60
-    }, 
-    showlegend: false, 
-    xaxis: {
-      autorange: true, 
-      //domain: [0, 1], 
-      //range: [plotResult.x[0], plotResult.x[-1]], 
-      //rangeslider: {range: [plotResult.x[0], plotResult.x[-1]]}, 
-      title: 'Date', 
-      //type: 'date'
-    }, 
-    yaxis: {
-      autorange: true, 
-      
-      type: 'linear'
-    }
-  };
-
-  const handleSave = async() => {
-    console.log(indicators);
-    try {
-      const response = await fetch("http://localhost:5000/save", {
-        method : "POST",
-        body: JSON.stringify(indicators),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+  const addHandler = (selectedIndicator) => {
+    setIndicators((currentList) => {
+      const values = [...currentList];
+      values.push({
+        indicator: selectedIndicator,
+        ...indicatorOptions[selectedIndicator],
       });
+      return values;
+    });
+  }
 
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
+  const removeHandler = (index) => {
+    setIndicators((currentList) => {
+      const values = [...currentList];
+      values.splice(index, 1);
+      return values;
+    });
+  }
 
-      const results = await response.json();
-      if (results != null){
-        successMsg();
-      }
+  const changeHandler = (index, updatedField, updatedValue) => {
+    setIndicators((currentList) => {
+      const values = [...currentList];
+      values[index][updatedField] = updatedValue;
+      return values;
+    });
+  }
 
-    } catch (err) {
-      console.log(err);
-    };
+  const saveHandler = () => {
+    setStrategy(strategyName, {
+      strategy: chosenIndicators,
+      running: false,
+      symbol: upperSymbol,
+      interval
+    })
   }
 
   const handleSubmit = async () => {
@@ -326,33 +266,50 @@ export default function Analysis({ symbols }) {
     
   }
 
+  const _candleLayout = {
+    dragmode: 'zoom', 
+    margin: {
+      r: 10, 
+      t: 25, 
+      b: 40, 
+      l: 60
+    }, 
+    showlegend: false, 
+    xaxis: {
+      autorange: true, 
+      //domain: [0, 1], 
+      //range: [plotResult.x[0], plotResult.x[-1]], 
+      //rangeslider: {range: [plotResult.x[0], plotResult.x[-1]]}, 
+      title: 'Date', 
+      //type: 'date'
+    }, 
+    yaxis: {
+      autorange: true, 
+      
+      type: 'linear'
+    }
+  };
+
+
   return (
-    <LoggedInLayout>
+    <LoggedInLayout style={{ overflowX: "hidden" }}>
       <div
         style={{
           minHeight: "100%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          overflowX: "scroll"
         }}
         className={styles.panel}
       >
         <div style={{ display: "flex", width: "100%" }}>
-          <SymbolSelector
-            symbols={symbols}
-            handler={symbolHandler}
-            style={{ flexBasis: "70%" }}
-          />
-          <Select
-            onSelect={handleAddIndicator}
-            value={null}
-            options={selectOptions}
-            style={{ flexBasis: "30%" }}
-            placeholder="Choose Indicator"
-          />
-        </div>
-        <div style={{ display: "flex", width: "100%" }}>
           <div style={{ flex: "1 0 70%" }}>
+            <SymbolSelector
+              symbols={symbols}
+              handler={symbolHandler}
+              style={{ width: "100%" }}
+            />
             <div style={{display: "flex"}}>
               <div style={{width: "50%"}}>
                 <div style={{paddingLeft: "5px"}}>From</div>
@@ -430,52 +387,26 @@ export default function Analysis({ symbols }) {
                 }}
               />
             }
-            
-            
           </div>
-
-          <div style={{ flexBasis: "30%" }}>
-            <>
-              {indicators.map((indicator, outerIndex) => (
-                <div style={{ display: "flex" }} key={outerIndex}>
-                  {Object.keys(indicator).map((field, innerIndex) =>
-                    field == "indicator" ? (
-                      <p key={`${outerIndex}-${innerIndex}`}>
-                        {indicator[field]}
-                      </p>
-                    ) : (
-                      <Input
-                        // type="number"
-                        name={field}
-                        onChange={(e) => handleInputChange(outerIndex, e)}
-                        placeholder={field}
-                        key={`${outerIndex}-${innerIndex}`}
-                      />
-                    )
-                  )}
-                  <Button
-                    onClick={() => handleRemovePlayers(outerIndex)}
-                    key={outerIndex}
-                    icon={<CloseOutlined />}
-                    shape="circle"
-                    type="text"
-                  />
-                </div>
-              ))}
-            </>
-
+          <div style={{ flexBasis: "30%", display: "flex", flexDirection: "column" }}>
+            <StrategyChooser 
+              indicators={indicators} 
+              addAddit={addHandler} 
+              removeAddit={removeHandler} 
+              changeAddit={changeHandler} 
+              chosenIndicators={chosenIndicators} 
+              setChosenIndicators={setChosenIndicators} 
+              saveHandler={() => { setModalOpen(true) }} 
+            />
             <Button type="primary" onClick={handleSubmit}>
-              Submit
+                Submit
             </Button>
-
-            <Button type="primary" onClick={handleSave}>
-              Save Strategy
-            </Button>
-
-            
           </div>
         </div>
       </div>
+      <Modal title="Basic Modal" open={modalOpen} onOk={saveHandler} onCancel={() => { setModalOpen(false) }}>
+        <Input onChange={(e) => { setStrategyName(e.target.value) }} placeholder="Enter a name for your strategy" />
+      </Modal>
     </LoggedInLayout>
   );
 }

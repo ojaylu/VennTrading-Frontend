@@ -6,15 +6,17 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "firebase-config";
 import { message } from "antd";
 import _ from "lodash";
-import { RedoOutlined } from "@ant-design/icons";
+import { RedoOutlined, PlusOutlined } from "@ant-design/icons";
 import DeleteStrategyButton from "components/logged-in/DeleteStrategyButton";
 import { useRouter } from "next/router";
 import StartStopBotButton from "components/logged-in/StartStopBotButton";
 import { useAuth } from "components/AuthProvider";
+import StrategyDrawer from "components/logged-in/StrategyDrawer";
 
-export default function Strategies() {
+export default function Strategies({ symbols }) {
     const [strategies, setStrategies] = useState([]);
     const [refetch, setRefetch] = useState(true);
+    const [openDrawer, setDrawerStatus] = useState(false);
     const router = useRouter();
     const { startBot, stopBot } = useAuth();
 
@@ -45,8 +47,8 @@ export default function Strategies() {
                     <StartStopBotButton 
                         running={ record.running } 
                         style={{ marginRight: "10px" }}
-                        startHandler={async() => {
-                            const { status } = await startBot(record.strategyId, record);
+                        startHandler={async(quantity, paper) => {
+                            const { status } = await startBot(record.strategyId, {...record, quantity, paper});
                             message.success(status);
                             setRefetch(true);
                         }}
@@ -105,7 +107,10 @@ export default function Strategies() {
             <PageHeader
                 title="Strategies"
                 extra={
-                    <Button icon={<RedoOutlined />} type="text" shape="circle" onClick={() => { setRefetch(true) }} />
+                    <>
+                        <Button icon={<PlusOutlined />} type="text" shape="circle" onClick={() => { setDrawerStatus(true) }} />
+                        <Button icon={<RedoOutlined />} type="text" shape="circle" onClick={() => { setRefetch(true) }} />
+                    </>
                 }
             />
             <Panel style={{overflowY: "scroll"}}>
@@ -124,6 +129,7 @@ export default function Strategies() {
                     }}
                 />
             </Panel>
+            <StrategyDrawer open={ openDrawer } setOpen={ setDrawerStatus } symbols={symbols} />
         </LoggedInLayout>
     )
 }

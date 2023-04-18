@@ -1,7 +1,7 @@
 import LoggedInLayout from "layouts/logged-in/MainLayout";
 import Settings from "components/Settings";
 
-export default function() {
+export default function SettingsPage() {
     console.log("API SECRET" + process.env.NEXT_PUBLIC_API_SECRET);
 
     return (

@@ -9,9 +9,12 @@ import DeleteStrategyButton from "components/logged-in/DeleteStrategyButton";
 import StrategyTree from "components/logged-in/StrategyTree";
 import { useAuth } from "components/AuthProvider";
 import _ from "lodash";
+import { images } from "optimized.json" assert { type: "json" };
 
 function BacktestPopup({ defaultValue, confirmHandler, disabled }) {
     const [quantity, setQuantity] = useState(defaultValue);
+    const [photos, setPhotos] = useState([]);
+
     return (
         <Popconfirm
             title={
@@ -43,6 +46,7 @@ export default function Strategy() {
     const [backtestingData, setBacktestingData] = useState({});
     const router = useRouter();
     const [quantity, setQuantity] = useState(1);
+    const [openDrawer, setDrawerStatus] = useState(false);
     const { id } = router.query;
 
     const getBacktestingData = async(strat, q) => {
@@ -89,8 +93,8 @@ export default function Strategy() {
                 extra={<>
                     <StartStopBotButton 
                         running={ strategy.running }
-                        startHandler={async() => {
-                            const {status} = await startBot(id, strategy);
+                        startHandler={async(quantity, paper) => {
+                            const {status} = await startBot(id, {...strategy, quantity, paper});
                             message.success(status);
                             setStrategy(strat => ({...strat, running: true}));
                         }}
@@ -116,7 +120,7 @@ export default function Strategy() {
                 <div style={{ flex: " 1 1 80%", alignItems: "center", display: "flex", flexDirection: "column" }}>
                     <Typography.Title level={4}>Metrics on Most Recent Data</Typography.Title>
                     <Typography style={{ marginBottom: "10px" }}>(based on {quantity} coin)</Typography>
-                    <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "40px" }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "40px", backgroundColor: "#808080", borderRadius: "10px" }}>
                         { Object.keys(backtestingData).map((metric, index) => (
                             <Statistic 
                                 key={index} 
@@ -140,6 +144,16 @@ export default function Strategy() {
                         <Button>Optimize</Button>
                     </div>
                 </div>
+                {/* <div>
+                    { Object.keys(images).map((imageKey, index) => {
+                        return (
+                            <>
+                                <div>{ imageKey }</div>
+                                <img src={'data:image/png;base64,' + images[imageKey]} alt="shap plot" key={index} />
+                            </>
+                        )
+                    }) }
+                </div> */}
             </div>
         </LoggedInLayout>
     )
