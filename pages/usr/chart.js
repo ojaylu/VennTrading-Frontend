@@ -14,6 +14,30 @@ import { setStrategy } from "utils/firebase/firestore";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
+const _candleLayout = {
+  dragmode: 'zoom', 
+  margin: {
+    r: 10, 
+    t: 25, 
+    b: 40, 
+    l: 60
+  }, 
+  showlegend: false, 
+  xaxis: {
+    autorange: true, 
+    //domain: [0, 1], 
+    //range: [plotResult.x[0], plotResult.x[-1]], 
+    //rangeslider: {range: [plotResult.x[0], plotResult.x[-1]]}, 
+    title: 'Date', 
+    //type: 'date'
+  }, 
+  yaxis: {
+    autorange: true, 
+    
+    type: 'linear'
+  }
+};
+
 const dateHandler = (date, setDate) => {
   return chosenDate => {
     if (date) {
@@ -50,7 +74,7 @@ export default function Analysis({ symbols }) {
   const [startDate, setStartDate] = useState(undefined);
   const [endDate, setEndDate] = useState(undefined);
   const { currentTheme } = useThemeSwitcher();
-  const [candleStick, setCandleStick] = useState([]);
+  const [candleStick, setCandleStick] = useState('1');
   const [candleLayout, setCandleLayout] = useState({});
   const [candleData, setCandleData] = useState([]);
   const [indicators, setIndicators] = useState([]);
@@ -110,11 +134,11 @@ export default function Analysis({ symbols }) {
     })
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     console.log(indicators);
     if (candleStick == '1'){
       try {
-        const response = fetch("http://localhost:5000/ohlc", {
+        fetch("http://localhost:5000/ohlc", {
           method: "POST",
           body: JSON.stringify({
             symbol: upperSymbol,
@@ -124,36 +148,33 @@ export default function Analysis({ symbols }) {
           }),
           headers: {
             "Content-Type": "application/json",
-            Accept: "application/json",
+            "Accept": "application/json",
           },
-        }).then(res => res.json()).then(
-          results => setPlotResult(results)
-        );
-  
-        const trace1 = [{
-          x: plotResult.x,
-          open: plotResult.open,
-          close: plotResult.close,
-          low: plotResult.low,
-          high: plotResult.high,
-          decreasing: {line: {color: '#7F7F7F'}}, 
-          increasing: {line: {color: '#17BECF'}}, 
-          line: {color: 'rgba(31,119,180,1)'}, 
-          type: 'candlestick', 
-          //xaxis: 'x', 
-          //yaxis: 'y',
-        }];
-  
-        setCandleLayout(_candleLayout);
-        setCandleData(trace1);
-        
+        }).then(res => res.json()).then(result => {
+          setPlotResult(result);
+          setCandleLayout(_candleLayout);
+          setCandleData([{
+            x: result.x,
+            open: result.open,
+            close: result.close,
+            low: result.low,
+            high: result.high,
+            decreasing: {line: {color: '#7F7F7F'}}, 
+            increasing: {line: {color: '#17BECF'}}, 
+            line: {color: 'rgba(31,119,180,1)'}, 
+            type: 'candlestick', 
+            //xaxis: 'x', 
+            //yaxis: 'y',
+          }]);
+        })
       } catch (err) {
         console.log(err);
       };
       
     } else {
       try {
-        const response = await fetch("http://localhost:5000/results", {
+        message.success("blahblah")
+        const response = fetch("http://localhost:5000/results", {
           method: "POST",
           body: JSON.stringify({
             symbol: upperSymbol,
@@ -162,18 +183,12 @@ export default function Analysis({ symbols }) {
           }),
           headers: {
             "Content-Type": "application/json",
-            Accept: "application/json",
+            "Accept": "application/json",
           },
+        }).then(res => res.json()).then(result => {
+          setPlotResult(result);
+          console.log(result);
         });
-  
-        
-        if (!response.ok) {
-          throw new Error(response.status);
-        }
-        const results = await response.json();
-        setPlotResult(results);
-        console.log(results);
-
       } catch (err) {
         console.log(err);
       };
@@ -263,33 +278,9 @@ export default function Analysis({ symbols }) {
 				dataPoints: plotResult
 			}]
 		}
-    
   }
 
-  const _candleLayout = {
-    dragmode: 'zoom', 
-    margin: {
-      r: 10, 
-      t: 25, 
-      b: 40, 
-      l: 60
-    }, 
-    showlegend: false, 
-    xaxis: {
-      autorange: true, 
-      //domain: [0, 1], 
-      //range: [plotResult.x[0], plotResult.x[-1]], 
-      //rangeslider: {range: [plotResult.x[0], plotResult.x[-1]]}, 
-      title: 'Date', 
-      //type: 'date'
-    }, 
-    yaxis: {
-      autorange: true, 
-      
-      type: 'linear'
-    }
-  };
-
+console.log(plotResult)
 
   return (
     <LoggedInLayout style={{ overflowX: "hidden" }}>
@@ -397,6 +388,7 @@ export default function Analysis({ symbols }) {
               chosenIndicators={chosenIndicators} 
               setChosenIndicators={setChosenIndicators} 
               saveHandler={() => { setModalOpen(true) }} 
+              separate
             />
             <Button type="primary" onClick={handleSubmit}>
                 Submit
@@ -404,7 +396,7 @@ export default function Analysis({ symbols }) {
           </div>
         </div>
       </div>
-      <Modal title="Basic Modal" open={modalOpen} onOk={saveHandler} onCancel={() => { setModalOpen(false) }}>
+      <Modal title="Save Strategy" open={modalOpen} onOk={saveHandler} onCancel={() => { setModalOpen(false) }}>
         <Input onChange={(e) => { setStrategyName(e.target.value) }} placeholder="Enter a name for your strategy" />
       </Modal>
     </LoggedInLayout>

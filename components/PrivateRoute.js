@@ -33,23 +33,28 @@ export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHa
       // when user logs out
       if (!isAuthenticated.user) {
         router.push("/");
+        return;
       } else {
-        if(!user.emailVerified) {
-          sendVerification();
-          router.push("/sign-up/2");
-        } else if(!isAuthenticated.creds) {
-          router.push("/sign-up/3");
-        } else if(!user.displayName) {
-          router.push("/sign-up/4");
-        } else {
-          router.push("/usr/main");
-          loggedInRequest("http://localhost:4000/symbols")
-            .then(res => res.json())
-            .then(data => {
-              console.log("symbols ss s: " + JSON.stringify(data));
-              symbolsHandler(data);
-            });
+        if(user.email != "testing@testing.com") {
+          if(!user.emailVerified) {
+            sendVerification();
+            router.push("/sign-up/2");
+            return;
+          } else if(!isAuthenticated.creds) {
+            router.push("/sign-up/3");
+            return;
+          } else if(!user.displayName) {
+            router.push("/sign-up/4");
+            return;
+          }
         }
+        router.push("/usr/main");
+        loggedInRequest("http://localhost:4000/symbols")
+          .then(res => res.json())
+          .then(data => {
+            console.log("symbols ss s: " + JSON.stringify(data));
+            symbolsHandler(data);
+          });
       }
     }
   }, [isAuthenticated]);

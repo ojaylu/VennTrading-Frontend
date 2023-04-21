@@ -8,7 +8,7 @@ const selectOptions = Object.keys(indicatorOptions).map((value) => ({
     value: value,
   }));
 
-export default function StrategyChooser({ indicators, addAddit=()=>{}, removeAddit=()=>{}, changeAddit=()=>{}, style={}, chosenIndicators, setChosenIndicators, saveHandler }) {
+export default function StrategyChooser({ indicators, addAddit=()=>{}, removeAddit=()=>{}, changeAddit=()=>{}, style={}, chosenIndicators, setChosenIndicators, saveHandler, separate=false }) {
     const handleAddIndicator = (selectedIndicator) => {
         if(selectedIndicator in chosenIndicators) {
             message.warning("indicator already added");
@@ -52,7 +52,7 @@ export default function StrategyChooser({ indicators, addAddit=()=>{}, removeAdd
     console.log("chosen indicators" + JSON.stringify(chosenIndicators))
 
     return (
-        <div style={{ height: "100%", ...style }}>
+        <div style={{ height: "100%", display: "flex", flexDirection: "column", ...style }}>
             <Select
                 onSelect={handleAddIndicator}
                 value={null}
@@ -60,7 +60,7 @@ export default function StrategyChooser({ indicators, addAddit=()=>{}, removeAdd
                 style={{ width: "100%" }}
                 placeholder="Choose Indicator"
             />
-            <div style={{ marginBottom: "auto", overflowY: "scroll" }}>
+            <div style={{ overflowY: "scroll", marginBottom: "10px",...(separate? { marginBottom: "auto"}: {}) }}>
                 {
                     indicators? indicators.map((indicator, outerIndex) => (
                         <div style={{ display: "flex" }} key={outerIndex}>
