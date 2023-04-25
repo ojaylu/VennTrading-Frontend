@@ -10,6 +10,7 @@ import StrategyTree from "components/logged-in/StrategyTree";
 import { useAuth } from "components/AuthProvider";
 import _ from "lodash";
 import { images } from "optimized.json" assert { type: "json" };
+import { Optimized } from "components/logged-in/Optimized";
 
 function BacktestPopup({ defaultValue, confirmHandler, disabled }) {
     const [quantity, setQuantity] = useState(defaultValue);
@@ -42,11 +43,12 @@ function BacktestPopup({ defaultValue, confirmHandler, disabled }) {
 
 export default function Strategy() {
     const [strategy, setStrategy] = useState({});
-    const { loggedInPost, startBot, stopBot } = useAuth();
+    const { loggedInPost, startBot, stopBot, loggedInRequest } = useAuth();
     const [backtestingData, setBacktestingData] = useState({});
+    const [tradingData, setTradingData] = useState({});
     const router = useRouter();
     const [quantity, setQuantity] = useState(1);
-    const [openDrawer, setDrawerStatus] = useState(false);
+    const [solutions, setSolutions] = useState({});
     const { id } = router.query;
 
     const getBacktestingData = async(strat, q) => {
@@ -54,7 +56,12 @@ export default function Strategy() {
             ...strat, 
             quantity: q
         }).then(data => data.json());
+        const tradingData = await loggedInRequest(`http://localhost:4000/trading-bot/${id}?symbol=${strat.symbol}&interval=${strat.interval}`)
+            .then(data => data.json());
         setBacktestingData(backtestingResult);
+        if(tradingData.status == "has bot") {
+            setTradingData(tradingData.metrics);
+        }
         console.log("quantity: " + q);
     }
 
@@ -117,7 +124,7 @@ export default function Strategy() {
                         <StrategyTree strategy={ strategy.strategy } />
                     </div>
                 </div>
-                <div style={{ flex: " 1 1 80%", alignItems: "center", display: "flex", flexDirection: "column" }}>
+                <div style={{ flex: "1 1 80%", alignItems: "center", display: "flex", flexDirection: "column" }}>
                     <Typography.Title level={4}>Metrics on Most Recent Data</Typography.Title>
                     <Typography style={{ marginBottom: "10px" }}>(based on {quantity} coin)</Typography>
                     <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "40px", backgroundColor: "#808080", borderRadius: "10px" }}>
@@ -132,6 +139,24 @@ export default function Strategy() {
                             />
                         )) }
                     </div>
+                    {
+                        !_.isEmpty(tradingData) &&
+                        <>
+                            <Typography.Title level={4}>Metrics on Most Recent Data</Typography.Title>
+                            <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "40px", backgroundColor: "#808080", borderRadius: "10px" }}>
+                                { Object.keys(tradingData).map((metric, index) => (
+                                    <Statistic 
+                                        key={index} 
+                                        title={metric.toUpperCase()} 
+                                        value={tradingData[metric]} 
+                                        suffix={metric.toLowerCase() == "return"? "%": "USD"}
+                                        precision={2}
+                                        style={{ margin: "0 10px" }}
+                                    />
+                                )) }
+                            </div>
+                        </>
+                    }
                     <div style={{ display: "flex", flexWrap: "wrap" }}>
                         <BacktestPopup 
                             defaultValue={quantity} 
@@ -141,20 +166,13 @@ export default function Strategy() {
                             }} 
                             disabled={_.isEmpty(strategy)} 
                         />
-                        <Button>Optimize</Button>
+                        <Button 
+                            onClick={ ()=>{setSolutions({a: 1})} }
+                        >Optimize</Button>
                     </div>
                 </div>
-                {/* <div>
-                    { Object.keys(images).map((imageKey, index) => {
-                        return (
-                            <>
-                                <div>{ imageKey }</div>
-                                <img src={'data:image/png;base64,' + images[imageKey]} alt="shap plot" key={index} />
-                            </>
-                        )
-                    }) }
-                </div> */}
             </div>
+            <Optimized solutions={ solutions } />
         </LoggedInLayout>
     )
 }

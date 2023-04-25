@@ -11,6 +11,7 @@ import { message } from "antd";
 import loginWithPopup from "utils/firebase/loginWithPopup";
 import { useRouter } from "next/router";
 import aes from "crypto-js/aes";
+import axios from "axios";
 
 const AuthContext = createContext();
 

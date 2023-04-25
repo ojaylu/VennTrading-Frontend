@@ -10,12 +10,28 @@ export default function StartStopBotButton({ running, startHandler, stopHandler,
     return (
         <>
             <Button 
-                onClick={ running? () => { stopHandler() }: () => { setModalOpen(true) }} 
+                onClick={ running? 
+                    () => { 
+                        stopHandler()
+                    }: 
+                    () => { 
+                        setModalOpen(true) 
+                    }} 
                 shape="round" 
                 style={ style }
                 danger={ running }
             >{ running? "Stop": "Start" }</Button>
-            <Modal title="Trading Bot Details" open={modalOpen} onOk={() => { startHandler(quantity, paper) }} onCancel={() => { setModalOpen(false) }} >
+            <Modal 
+                title="Trading Bot Details" 
+                open={modalOpen} 
+                onOk={() => { 
+                    startHandler(quantity, paper);
+                    setModalOpen(false);
+                }} 
+                onCancel={() => { 
+                    setModalOpen(false);
+                }} 
+            >
                 <div>Quantity to trade: </div><InputNumber onChange={(value) => setQuantity(value)} />
                 <br/>
                 <br/>

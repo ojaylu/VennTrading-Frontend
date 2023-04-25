@@ -25,13 +25,13 @@ export default function SideBar() {
     }
 
     const items = {
-        main: {
-            icon: <HomeOutlined />,
-            handler: () => {
-                router.push("/usr/main");
-            },
-            label: "Home"
-        },
+        // main: {
+        //     icon: <HomeOutlined />,
+        //     handler: () => {
+        //         router.push("/usr/main");
+        //     },
+        //     label: "Home"
+        // },
         trade: {
             icon: <StockOutlined />,
             handler: () => {
@@ -68,7 +68,7 @@ export default function SideBar() {
             handler: logout
         }
     };
-    
+
     return (
         <Menu
             theme="dark"
