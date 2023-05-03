@@ -11,6 +11,7 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import StrategyChooser from "components/logged-in/StrategyChooser";
 import { indicatorOptions } from "utils/indicators";
 import { setStrategy } from "utils/firebase/firestore";
+import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
@@ -349,8 +350,16 @@ console.log(plotResult)
                 <Radio.Button value="1Y">1 Year</Radio.Button>*/}
               </Radio.Group>
             </div>
+
+            <div style={{height: "600px"}}>
+              <AdvancedRealTimeChart
+                autosize
+                theme={currentTheme} 
+                // disabled_features={["datasource_copypaste"]}
+              />
+            </div>
             
-            {candleStick?
+            {/* {candleStick?
               <Plot
                 data={candleData}
                 layout = {{...candleLayout, ...(currentTheme == "dark" && {
@@ -377,7 +386,7 @@ console.log(plotResult)
                   }
                 }}
               />
-            }
+            } */}
           </div>
           <div style={{ flexBasis: "30%", display: "flex", flexDirection: "column" }}>
             <StrategyChooser 

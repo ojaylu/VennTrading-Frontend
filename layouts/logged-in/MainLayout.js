@@ -19,7 +19,7 @@ export default function MainLayout({ children, style }) {
     const router = useRouter();
 
     const routes = [
-      {label: "Home", path: "/usr/main"},
+      // {label: "Home", path: "/usr/main"},
       {label: "Assets", path: "/usr/assets"},
       {label: "Trade", path: "/usr/trade"},
       {label: "History", path: "/usr/history-overview"},

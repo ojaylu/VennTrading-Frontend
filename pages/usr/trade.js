@@ -37,7 +37,9 @@ export default function Trade({ symbols }) {
                         return {...obj, [filter.filterType]: rest}
                 }, {}));
             })
-            .catch((err) => message.error(`${symbol}, ${JSON.stringify(err)}`));
+            .catch((err) => {}
+                //message.error(`${symbol}, ${JSON.stringify(err)}`)
+            );
     };
 
     useEffect(() => {

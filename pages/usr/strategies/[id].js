@@ -142,7 +142,7 @@ export default function Strategy() {
                     {
                         !_.isEmpty(tradingData) &&
                         <>
-                            <Typography.Title level={4}>Metrics on Most Recent Data</Typography.Title>
+                            <Typography.Title level={4}>Metrics on Live Trading Bot</Typography.Title>
                             <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "40px", backgroundColor: "#808080", borderRadius: "10px" }}>
                                 { Object.keys(tradingData).map((metric, index) => (
                                     <Statistic 

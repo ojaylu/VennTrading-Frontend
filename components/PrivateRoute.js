@@ -48,7 +48,7 @@ export default function PrivateRoute({ /* protectedRoutes,*/ children, symbolsHa
             return;
           }
         }
-        router.push("/usr/main");
+        router.push("/usr/assets");
         loggedInRequest("http://localhost:4000/symbols")
           .then(res => res.json())
           .then(data => {

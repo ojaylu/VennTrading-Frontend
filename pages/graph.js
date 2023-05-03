@@ -99,10 +99,10 @@ export default function Graph() {
       };
     
     return (
-        <PublicPage>
-        <div id="treeWrapper" style={{ width: '100vh', height: '100vh' }}>
+        // <PublicPage>
+        <div id="treeWrapper" style={{ width: '100vw', height: '100vh' }}>
             <Tree data={convertArrayToTree(data)} orientation="vertical"/>
         </div>
-        </PublicPage>
+        // {/* </PublicPage> */}
     )
 }

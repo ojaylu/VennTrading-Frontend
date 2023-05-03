@@ -40,6 +40,7 @@ export default function UserOptions() {
             </DropdownItem>
         }
     ]
+    
     const unauthenticatedItems = [
     ]
 
